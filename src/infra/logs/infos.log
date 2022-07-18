@@ -1,0 +1,4 @@
+{"level":"info","message":"[gerarTokenDeSenha] start function body={\"email\":\"vinicius2@email.com\"}","timestamp":"2022-06-29T22:35:19.941Z"}
+{"level":"info","message":"[gerarTokenDeSenha] user = {\"id\":4011,\"nivel\":1,\"name\":null,\"email\":\"vinicius2@email.com\",\"senha\":\"$2a$10$pSj1ApCnF/ngrRy0Qy0OKe/NFjTY7XaazikgR6XQWt1HUxlVSzhWm\",\"hashResetSenha\":\"U2FsdGVkX1/03AhGXskpfUFX0otBkY0QSClmiTcVJWcJ8uElTR8omrP9RfZf7MfJ\",\"createdAt\":\"2022-06-27T23:15:26.000Z\",\"updatedAt\":\"2022-06-29T22:32:58.000Z\"}","timestamp":"2022-06-29T22:35:19.952Z"}
+{"level":"info","message":"[gerarTokenDeSenha] start function body={\"email\":\"viniciuFSFB@email.com\"}","timestamp":"2022-06-29T22:36:07.036Z"}
+{"level":"error","message":"[gerarTokenDeSenha] user not found","timestamp":"2022-06-29T22:36:07.043Z"}

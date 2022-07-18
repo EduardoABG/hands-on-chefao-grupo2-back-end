@@ -1,0 +1,12 @@
+{"level":"info","message":"[gerarTokenDeSenha] start function body={\"email\":\"viniciuFSFB@email.com\"}","timestamp":"2022-06-29T22:37:50.083Z"}
+{"level":"error","message":"[gerarTokenDeSenha] user not found","timestamp":"2022-06-29T22:37:50.094Z"}
+{"level":"info","message":"[gerarTokenDeSenha] start function body={\"email\":\"viniciuFSFB@email.com\"} client_ip=::ffff:127.0.0.1","timestamp":"2022-06-29T22:39:27.723Z"}
+{"level":"error","message":"[gerarTokenDeSenha] user not found","timestamp":"2022-06-29T22:39:27.734Z"}
+{"level":"info","message":"[gerarTokenDeSenha] start function body={\"email\":\"viniciuFSFB@email.com\"} client_ip=","timestamp":"2022-06-29T22:41:38.807Z"}
+{"level":"error","message":"[gerarTokenDeSenha] user not found","timestamp":"2022-06-29T22:41:38.817Z"}
+{"level":"info","message":"[gerarTokenDeSenha] start function body={\"email\":\"vinicius2@email.com\"} client_ip=","timestamp":"2022-06-29T23:55:53.734Z"}
+{"level":"info","message":"[gerarTokenDeSenha] user = {\"id\":4011,\"nivel\":1,\"name\":null,\"email\":\"vinicius2@email.com\",\"senha\":\"$2a$10$pSj1ApCnF/ngrRy0Qy0OKe/NFjTY7XaazikgR6XQWt1HUxlVSzhWm\",\"hashResetSenha\":\"U2FsdGVkX19BWA+Fq7irH/TbvtMvkaDLEnOZZ2v57yYicP/JKdsMy9UBu4Ir9dcN\",\"createdAt\":\"2022-06-27T23:15:26.000Z\",\"updatedAt\":\"2022-06-29T22:35:19.000Z\"}","timestamp":"2022-06-29T23:55:53.742Z"}
+{"level":"info","message":"[gerarTokenDeSenha] finish function","timestamp":"2022-06-29T23:55:53.757Z"}
+{"level":"info","message":"[recuperarSenha] start function body = {\"email\":\"vinicius2@email.com\"}","timestamp":"2022-06-29T23:56:00.339Z"}
+{"level":"info","message":"[recuperarSenha] start function body = {\"token\":\"U2FsdGVkX19P9hCdHQ5k12g+Eq1HZ5U1t/uWDmABgMa45QwB3YVdX0r8Ow4NRitk\",\"senha\":\"123\"}","timestamp":"2022-06-29T23:56:51.713Z"}
+{"level":"info","message":"[recuperarSenha] finalizando a função com a senha alterada","timestamp":"2022-06-29T23:56:51.978Z"}
