@@ -2,7 +2,7 @@ import { connect, Mongoose } from "mongoose";
 export default class Conection {
   private instance: Mongoose | undefined;
   private url_conection: string;
-
+  
   constructor(url_conection: string) {
     this.url_conection = url_conection;
   }
