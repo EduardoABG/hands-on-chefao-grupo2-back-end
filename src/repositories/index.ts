@@ -1,6 +1,6 @@
 import UserRepository from "./User";
-import { user } from "../models";
+import { User } from "../models";
 
-const userRepository = new UserRepository(user);
+const userRepository = new UserRepository(User);
 
 export { userRepository };

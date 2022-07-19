@@ -1,10 +1,10 @@
 import IRepository from "../IRepository";
-import User from "../../models/User";
 import IUser from "./IUser";
+import { Model } from "mongoose";
 
 export default class UserRepository implements IRepository {
   private userModel: any;
-  constructor(userModel: IUser) {
+  constructor(userModel: Model<IUser>) {
     this.userModel = userModel;
   }
   async create(payload: { id: number; name: string; email: string }) {
