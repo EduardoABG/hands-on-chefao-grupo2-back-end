@@ -1,10 +1,11 @@
 import IRepository from "../IRepository";
-import { IUser } from "../../models/User";
+import User from "../../models/User";
+import IUser from "./IUser";
 
 export default class UserRepository implements IRepository {
   private UserModel: any;
   constructor(UserModel: IUser) {
-    this.UserModel = UserModel.instance;
+    this.UserModel = UserModel;
   }
   create(payload: any): Promise<any> {
     throw new Error("Method not implemented.");
