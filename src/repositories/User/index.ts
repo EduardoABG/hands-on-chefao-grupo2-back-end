@@ -3,26 +3,16 @@ import User from "../../models/User";
 import IUser from "./IUser";
 
 export default class UserRepository implements IRepository {
-  private UserModel: any;
-  constructor(UserModel: IUser) {
-    this.UserModel = UserModel;
+  private userModel: any;
+  constructor(userModel: IUser) {
+    this.userModel = userModel;
   }
-  create(payload: any): Promise<any> {
-    throw new Error("Method not implemented.");
+  async create(payload: { id: number; name: string; email: string }) {
+    return this.userModel.create(payload);
   }
-  update(payload: any, id: any, condition?: any): Promise<any> {
-    throw new Error("Method not implemented.");
-  }
-  findAll(payload?: any): Promise<any> {
-    throw new Error("Method not implemented.");
-  }
-  findById(payload?: any, id?: any): Promise<any> {
-    throw new Error("Method not implemented.");
-  }
-  delete(id: any): Promise<any> {
-    throw new Error("Method not implemented.");
-  }
-  find(payload?: any, id?: any): Promise<any> {
-    throw new Error("Method not implemented.");
-  }
+  async find(payload?: any, id?: any) {}
+  async update(payload: any, id: any) {}
+  async findAll(payload?: any) {}
+  async findById(id: any, payload?: any) {}
+  async delete(id: any) {}
 }
