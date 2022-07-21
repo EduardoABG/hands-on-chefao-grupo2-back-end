@@ -1,5 +1,5 @@
 import IRepository from "../IRepository";
-import IUser from "./IUser";
+import { IUser}  from "../../models/User";
 import { Model } from "mongoose";
 
 export default class UserRepository implements IRepository {
