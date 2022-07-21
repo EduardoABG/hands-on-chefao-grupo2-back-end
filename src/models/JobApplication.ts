@@ -8,7 +8,11 @@ export interface IJobApplication {
   tagsFeedback: string[];
   applicationDate: Date;
   user: Schema.Types.ObjectId | IUser;
-  job: Schema.Types.ObjectId | IJob;
+  job: {
+    _id:  Schema.Types.ObjectId | IJob,
+    name: string,
+    companyName: string,
+  },
 }
 
 // Const explicando para o mongoose:
@@ -26,12 +30,13 @@ const jobApplicationSchema = new Schema <IJobApplication> ({
       type: Schema.Types.Date,
   },
   user: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
+      type: Schema.Types.ObjectId,
+      ref: "User",
   },
   job: {
-    type: Schema.Types.ObjectId,
-    ref: "Job",
+      _id: { type: Schema.Types.ObjectId, ref: "Job" },
+      name: { type: Schema.Types.String},
+      companyName: { type: Schema.Types.String},
   },
 },
   {timestamps: true}
