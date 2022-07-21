@@ -1,6 +1,6 @@
-import { Schema, model, Date } from "mongoose";
+import { Schema, model } from "mongoose";
 // Interface explicando para o TypeScript:
-interface IUser {
+export interface IUser {
     name: string;
     email: string;
     password: string;
