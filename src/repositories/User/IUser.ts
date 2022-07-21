@@ -1,5 +1,21 @@
 export default interface IUser {
-  id: number;
   name: string;
-  email: string;
+    email: string;
+    password: string;
+    phone: string;
+    birthDate: Date;
+    aboutMe: string;
+    profilePicture: string;
+    resume: {
+        employmentHistory: String[];
+        education: String[];
+        certificates: String[];
+        languages: String[];
+        linkedin: String;
+        portfolio: String;
+        address: String;
+        salary: number;
+        RG: String;
+        CPF: String;
+    };
 }
