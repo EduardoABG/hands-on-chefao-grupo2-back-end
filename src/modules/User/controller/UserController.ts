@@ -32,6 +32,26 @@ type BodyUserUpdate = {
     CPF: String;
   };
 };
+
+type BodyUserList = {
+  name: string;
+  
+  phone: string;
+ 
+  aboutMe: string;
+  profilePicture: string;
+  resume: {
+    employmentHistory: String[];
+    education: String[];
+    certificates: String[];
+    languages: String[];
+    linkedin: String;
+    portfolio: String;
+    address: String;
+    salary: number;
+   
+  };
+};
 export default class UserController {
   private useCase: UserUseCase;
   constructor(useCase: UserUseCase) {
@@ -76,11 +96,28 @@ export default class UserController {
       }
     };
   }
-  
-    async list(req: Request, res: Response){
-    const users = await User.find()
 
-    return res.json(users);
+  list() {
+    return async (req: Request, res: Response) => {
+      try {
+        const { id } = req.params;
+
+        const listUser = await this.useCase.listUser(
+          req.body as BodyUserList,
+          id
+        );
+        return res.json(listUser);
+      } catch (error) {
+        console.log(error);
+        return res.status(400);
+      }
+    };
   }
+  
+  //   async list(req: Request, res: Response){
+  //   const users = await User.find()
+
+  //   return res.json(users);
+  // }
 }
 

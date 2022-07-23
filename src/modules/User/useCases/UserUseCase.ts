@@ -27,6 +27,25 @@ type PayloadUserUpdate = {
     CPF: String;
   };
 };
+type PayloadUserList = {
+  name: string;
+  
+  phone: string;
+ 
+  aboutMe: string;
+  profilePicture: string;
+  resume: {
+    employmentHistory: String[];
+    education: String[];
+    certificates: String[];
+    languages: String[];
+    linkedin: String;
+    portfolio: String;
+    address: String;
+    salary: number;
+   
+  };
+};
 
 export default class UserUseCase {
   private repository: IRepository;
@@ -59,5 +78,19 @@ export default class UserUseCase {
     };
     const updateUser = this.repository.update(userData, id);
     return updateUser;
+  }
+  listUser (id:any, payload:PayloadUserList) {
+    const userList = {
+      name: payload.name,
+      
+      phone: payload.phone,
+      profilePicture: payload.profilePicture,
+      
+      aboutMe: payload.aboutMe,
+      resume: payload.resume,
+    };
+    const listUser = this.repository.findById(id, userList);
+    return listUser;
+
   }
 }
