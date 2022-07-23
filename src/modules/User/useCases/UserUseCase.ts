@@ -1,9 +1,10 @@
 import IRepository from "../../../repositories/IRepository";
 type PayloadUser = {
-  id: number;
   name: string;
   email: string;
   password: string;
+  phone: string;
+  profilePicture: string;
 };
 
 export default class UserUseCase {
@@ -15,10 +16,11 @@ export default class UserUseCase {
 
   cadastrarUsuario(payload: PayloadUser) {
     const userData = {
-      id: payload.id,
       name: payload.name,
       email: payload.email,
       password: payload.password,
+      phone: payload.phone,
+      profilePicture: payload.profilePicture,
     };
     const newUser = this.repository.create(userData);
     return newUser;
