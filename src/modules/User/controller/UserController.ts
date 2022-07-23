@@ -59,27 +59,25 @@ export default class UserController {
       }
     };
   }
-<<<<<<< HEAD
-  async list(req: Request, res: Response){
-    const users = await User.find()
 
-    return res.json(users);
-=======
   update() {
-    return async (req: Request, res: Response) => {
-      try {
-        const { id } = req.params;
+    try {
+      const { id } = req.params;
 
-        const updateUser = await this.useCase.updateUser(
-          req.body as BodyUserUpdate,
-          id
-        );
-        return res.status(204).json(updateUser);
-      } catch (error) {
-        console.log(error);
-        return res.status(400);
-      }
-    };
->>>>>>> origin/main
-  }
+      const updateUser = await this.useCase.updateUser(
+        req.body as BodyUserUpdate,
+        id
+      );
+      return res.status(204).json(updateUser);
+    } catch (error) {
+      console.log(error);
+      return res.status(400);
+    }
+  };
+}
+  async list(req: Request, res: Response){
+  const users = await User.find()
+
+  return res.json(users);
+}
 }
