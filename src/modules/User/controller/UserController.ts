@@ -2,12 +2,33 @@ import { Request, Response } from "express";
 import UserUseCase from "../useCases/UserUseCase";
 import User from "../../../models/User";
 
-type BodyUser = {
+type BodyUserCreate = {
   name: string;
   email: string;
   password: string;
   phone: string;
   profilePicture: string;
+};
+type BodyUserUpdate = {
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+  birthDate: Date;
+  aboutMe: string;
+  profilePicture: string;
+  resume: {
+    employmentHistory: String[];
+    education: String[];
+    certificates: String[];
+    languages: String[];
+    linkedin: String;
+    portfolio: String;
+    address: String;
+    salary: number;
+    RG: String;
+    CPF: String;
+  };
 };
 export default class UserController {
   private useCase: UserUseCase;
@@ -25,10 +46,26 @@ export default class UserController {
           return res.status(400).json("Este e-mail já está cadastrado.");
         }
 
-        const newUser = await this.useCase.cadastrarUsuario(
-          req.body as BodyUser
+        const newUser = await this.useCase.createUser(
+          req.body as BodyUserCreate
         );
         return res.status(201).json(newUser);
+      } catch (error) {
+        console.log(error);
+        return res.status(400);
+      }
+    };
+  }
+  update() {
+    return async (req: Request, res: Response) => {
+      try {
+        const { id } = req.params;
+
+        const updateUser = await this.useCase.updateUser(
+          req.body as BodyUserUpdate,
+          id
+        );
+        return res.status(204).json(updateUser);
       } catch (error) {
         console.log(error);
         return res.status(400);
