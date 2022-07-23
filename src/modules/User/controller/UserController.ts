@@ -61,23 +61,26 @@ export default class UserController {
   }
 
   update() {
-    try {
-      const { id } = req.params;
+    return async (req: Request, res: Response) => {
+      try {
+        const { id } = req.params;
 
-      const updateUser = await this.useCase.updateUser(
-        req.body as BodyUserUpdate,
-        id
-      );
-      return res.status(204).json(updateUser);
-    } catch (error) {
-      console.log(error);
-      return res.status(400);
-    }
-  };
-}
-  async list(req: Request, res: Response){
-  const users = await User.find()
+        const updateUser = await this.useCase.updateUser(
+          req.body as BodyUserUpdate,
+          id
+        );
+        return res.status(204).json(updateUser);
+      } catch (error) {
+        console.log(error);
+        return res.status(400);
+      }
+    };
+  }
+  
+    async list(req: Request, res: Response){
+    const users = await User.find()
 
-  return res.json(users);
+    return res.json(users);
+  }
 }
-}
+
