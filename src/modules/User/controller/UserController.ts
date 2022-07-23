@@ -2,7 +2,13 @@ import { Request, Response } from "express";
 import UserUseCase from "../useCases/UserUseCase";
 import User from "../../../models/User";
 
-type BodyUser = { id: number; name: string; email: string };
+type BodyUser = {
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+  profilePicture: string;
+};
 export default class UserController {
   private useCase: UserUseCase;
   constructor(useCase: UserUseCase) {
