@@ -3,6 +3,7 @@ type PayloadUser = {
   id: number;
   name: string;
   email: string;
+  password: string;
 };
 
 export default class UserUseCase {
@@ -17,6 +18,7 @@ export default class UserUseCase {
       id: payload.id,
       name: payload.name,
       email: payload.email,
+      password: payload.password,
     };
     const newUser = this.repository.create(userData);
     return newUser;

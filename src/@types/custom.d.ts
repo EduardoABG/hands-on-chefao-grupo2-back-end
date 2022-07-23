@@ -2,6 +2,7 @@ type User = {
   id: number;
   nome: string;
   email: string;
+  password: string;
 };
 
 declare namespace Express {
@@ -9,3 +10,4 @@ declare namespace Express {
     user?: User;
   }
 }
+

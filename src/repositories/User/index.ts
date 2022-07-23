@@ -7,7 +7,7 @@ export default class UserRepository implements IRepository {
   constructor(userModel: Model<IUser>) {
     this.userModel = userModel;
   }
-  async create(payload: { id: number; name: string; email: string }) {
+  async create(payload: { id: number; name: string; email: string, password: string }) {
     return this.userModel.create(payload);
   }
   async find(payload?: any, id?: any) {}
