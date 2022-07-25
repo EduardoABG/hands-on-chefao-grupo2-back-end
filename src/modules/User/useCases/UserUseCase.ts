@@ -55,7 +55,7 @@ export default class UserUseCase {
   }
 
   createUser(payload: PayloadUserCreate) {
-    const hashedPassword = bcrypt.hash(payload.password, 10);
+    const hashedPassword = bcrypt.hashSync(payload.password, 10);
     const userData = {
       name: payload.name,
       email: payload.email,
