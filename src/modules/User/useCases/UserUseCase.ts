@@ -83,10 +83,8 @@ export default class UserUseCase {
   listUser(_id: any, payload: PayloadUserList) {
     const userList = {
       name: payload.name,
-
       phone: payload.phone,
       profilePicture: payload.profilePicture,
-
       aboutMe: payload.aboutMe,
       resume: payload.resume,
     };
