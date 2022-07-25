@@ -1,6 +1,4 @@
-import express from "express";
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
 import UserUseCase from "../useCases/UserUseCase";
 import User from "../../../models/User";
 
@@ -35,9 +33,9 @@ type BodyUserUpdate = {
 
 type BodyUserList = {
   name: string;
-  
+
   phone: string;
- 
+
   aboutMe: string;
   profilePicture: string;
   resume: {
@@ -49,7 +47,6 @@ type BodyUserList = {
     portfolio: String;
     address: String;
     salary: number;
-   
   };
 };
 export default class UserController {
@@ -60,8 +57,7 @@ export default class UserController {
   create() {
     return async (req: Request, res: Response) => {
       try {
-        const { id, name, email, password } = req.body;
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const { email } = req.body;
         const savedUser = await User.count({
           email,
         });
@@ -83,11 +79,11 @@ export default class UserController {
   update() {
     return async (req: Request, res: Response) => {
       try {
-        const { id } = req.params;
+        const { _id } = req.params;
 
         const updateUser = await this.useCase.updateUser(
-          req.body as BodyUserUpdate,
-          id
+          _id,
+          req.body as BodyUserUpdate
         );
         return res.status(204).json(updateUser);
       } catch (error) {
@@ -100,11 +96,11 @@ export default class UserController {
   list() {
     return async (req: Request, res: Response) => {
       try {
-        const { id } = req.params;
+        const { _id } = req.params;
 
         const listUser = await this.useCase.listUser(
-          req.body as BodyUserList,
-          id
+          _id,
+          req.body as BodyUserList
         );
         return res.json(listUser);
       } catch (error) {
@@ -113,11 +109,4 @@ export default class UserController {
       }
     };
   }
-  
-  //   async list(req: Request, res: Response){
-  //   const users = await User.find()
-
-  //   return res.json(users);
-  // }
 }
-

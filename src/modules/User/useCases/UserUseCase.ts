@@ -1,4 +1,5 @@
 import IRepository from "../../../repositories/IRepository";
+import bcrypt from "bcryptjs";
 type PayloadUserCreate = {
   name: string;
   email: string;
@@ -29,9 +30,9 @@ type PayloadUserUpdate = {
 };
 type PayloadUserList = {
   name: string;
-  
+
   phone: string;
- 
+
   aboutMe: string;
   profilePicture: string;
   resume: {
@@ -43,7 +44,6 @@ type PayloadUserList = {
     portfolio: String;
     address: String;
     salary: number;
-   
   };
 };
 
@@ -55,17 +55,18 @@ export default class UserUseCase {
   }
 
   createUser(payload: PayloadUserCreate) {
+    const hashedPassword = bcrypt.hash(payload.password, 10);
     const userData = {
       name: payload.name,
       email: payload.email,
-      password: payload.password,
+      password: hashedPassword,
       phone: payload.phone,
       profilePicture: payload.profilePicture,
     };
     const newUser = this.repository.create(userData);
     return newUser;
   }
-  updateUser(payload: PayloadUserUpdate, id: any) {
+  updateUser(_id: any, payload: PayloadUserUpdate) {
     const userData = {
       name: payload.name,
       email: payload.email,
@@ -76,21 +77,20 @@ export default class UserUseCase {
       aboutMe: payload.aboutMe,
       resume: payload.resume,
     };
-    const updateUser = this.repository.update(userData, id);
+    const updateUser = this.repository.update(_id, userData);
     return updateUser;
   }
-  listUser (id:any, payload:PayloadUserList) {
+  listUser(_id: any, payload: PayloadUserList) {
     const userList = {
       name: payload.name,
-      
+
       phone: payload.phone,
       profilePicture: payload.profilePicture,
-      
+
       aboutMe: payload.aboutMe,
       resume: payload.resume,
     };
-    const listUser = this.repository.findById(id, userList);
+    const listUser = this.repository.findById(_id, userList);
     return listUser;
-
   }
 }

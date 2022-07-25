@@ -18,6 +18,7 @@ export default class UserRepository implements IRepository {
   }
   async find(payload?: any, id?: any) {}
   async update(
+    id: any,
     payload: {
       name: string;
       email: string;
@@ -38,17 +39,19 @@ export default class UserRepository implements IRepository {
         RG: String;
         CPF: String;
       };
-    },
-    id: any
+    }
   ) {
-    return this.userModel.update(payload, { where: { id: id } });
+    return this.userModel.updateOne({ _id: id }, payload);
   }
   async findAll(payload?: any) {}
-  async findById(id: any, payload?: {name: string;
-    phone: string;
-    aboutMe: string;
-    profilePicture: string;
-    resume: {
+  async findById(
+    id: any,
+    payload?: {
+      name: string;
+      phone: string;
+      aboutMe: string;
+      profilePicture: string;
+      resume: {
         employmentHistory: String[];
         education: String[];
         certificates: String[];
@@ -57,9 +60,10 @@ export default class UserRepository implements IRepository {
         portfolio: String;
         address: String;
         salary: number;
-   
-    };
-}) {return this.userModel.findById({ where: { id: id }}, payload
-)}
+      };
+    }
+  ) {
+    return this.userModel.findById({ _id: id }, payload);
+  }
   async delete(id: any) {}
 }
