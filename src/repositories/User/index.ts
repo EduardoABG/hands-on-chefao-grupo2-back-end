@@ -14,7 +14,7 @@ export default class UserRepository implements IRepository {
     phone: string;
     profilePicture: string;
   }) {
-    return this.userModel.create(payload);
+    return await this.userModel.create(payload);
   }
   async find(payload?: any, id?: any) {}
   async update(
@@ -41,7 +41,7 @@ export default class UserRepository implements IRepository {
       };
     }
   ) {
-    return this.userModel.updateOne({ _id: id }, payload);
+    return await this.userModel.updateOne({ _id: id }, payload);
   }
   async findAll() {
     const list = await this.userModel.find({}, ['-password', '-__v']);

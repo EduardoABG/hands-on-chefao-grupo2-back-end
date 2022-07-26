@@ -56,7 +56,7 @@ export default class UserUseCase {
     this.repository = userRepository;
   }
 
-  createUser(payload: PayloadUserCreate) {
+  async createUser(payload: PayloadUserCreate) {
     const hashedPassword = bcrypt.hashSync(payload.password, 10);
     const userData = {
       name: payload.name,
@@ -65,7 +65,7 @@ export default class UserUseCase {
       phone: payload.phone,
       profilePicture: payload.profilePicture,
     };
-    const newUser = this.repository.create(userData);
+    const newUser = await this.repository.create(userData);
     return newUser;
   }
   updateUser(_id: any, payload: PayloadUserUpdate) {
