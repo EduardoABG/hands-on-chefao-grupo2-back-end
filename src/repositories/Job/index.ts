@@ -26,5 +26,7 @@ export default class JobRepository implements IRepository {
   async findById(id: any, payload?: any) {
     return this.jobModel.findById(id);
   }
-  async delete(id: any) {}
+  async delete(id: any) {
+    return await this.jobModel.deleteOne({ _id: id });
+  }
 }

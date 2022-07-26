@@ -64,6 +64,19 @@ export default class JobController {
     };
   }
   delete() {
-    console.log("delete route");
+    return async (req: Request, res: Response) => {
+      try {
+        const { id } = req.params;
+
+        const deleteJob = await this.useCase.deleteJob(id);
+        if (!deleteJob) {
+          return res.status(404).json({ message: "Vaga não encontrada" });
+        }
+        return res.status(200);
+      } catch (error) {
+        console.log(error);
+        return res.status(400);
+      }
+    };
   }
 }

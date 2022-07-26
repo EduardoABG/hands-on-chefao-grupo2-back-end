@@ -41,4 +41,13 @@ export default class JobUseCase {
     const listJob = this.repository.findById(_id);
     return listJob;
   }
+
+  deleteJob(_id: any) {
+    const isValidId = ObjectId.isValid(_id);
+    if (!isValidId) {
+      return null;
+    }
+    const jobErase = this.repository.delete(_id);
+    return jobErase;
+  }
 }

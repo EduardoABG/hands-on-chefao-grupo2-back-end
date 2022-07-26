@@ -7,6 +7,6 @@ routes.get("/jobs", jobController.listAll());
 routes.get("/jobs/:id", jobController.list());
 routes.post("/jobs", jobController.create());
 routes.put("/jobs/:_id", jobController.update);
-routes.delete("/jobs/:_id", jobController.delete);
+routes.delete("/jobs/:_id", jobController.delete());
 
 export default routes;
