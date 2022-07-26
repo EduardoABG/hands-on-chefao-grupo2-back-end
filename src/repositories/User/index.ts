@@ -43,7 +43,10 @@ export default class UserRepository implements IRepository {
   ) {
     return this.userModel.updateOne({ _id: id }, payload);
   }
-  async findAll(payload?: any) {}
+  async findAll() {
+    const list = await this.userModel.find({}, ['-password', '-__v']);
+    return list;
+  }
   async findById(id: any) {
     return this.userModel.findById(id, ['-password', '-__v']);
   }

@@ -93,12 +93,29 @@ export default class UserController {
     };
   }
 
+  listAll() {
+    return async (req: Request, res: Response) => {
+      try {
+        const userList = await this.useCase.listAll();
+        return res.json(userList);
+
+      } catch (error) {
+        console.log(error);
+        return res.status(500);
+      }
+    }
+  }
+
   list() {
     return async (req: Request, res: Response) => {
       try {
-        const { _id } = req.params;
+        const { id } = req.params;
 
-        const listUser = await this.useCase.listUser(_id);
+        const listUser = await this.useCase.listUser(id);
+
+        if(!listUser) {
+          return res.status(404).json({ message: "Usuario não encontrado" });
+        }
 
         return res.json(listUser);
       } catch (error) {
@@ -106,5 +123,9 @@ export default class UserController {
         return res.status(400);
       }
     };
+  }
+
+  delete() {
+    console.log("delete route");
   }
 }
