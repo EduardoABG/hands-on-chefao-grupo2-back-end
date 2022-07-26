@@ -1,11 +1,37 @@
 import { Request, Response } from "express";
 import JobUseCase from "../useCases/JobUseCase";
-import Job from "../../../models/Job";
+
+type BodyJobCreate = {
+  name: string;
+  description: string;
+  salary: number;
+  companyName: string;
+  status: string;
+  date: Date;
+};
 
 export default class JobController {
   private useCase: JobUseCase;
   constructor(useCase: JobUseCase) {
     this.useCase = useCase;
+  }
+  create() {
+    return async (req: Request, res: Response) => {
+      try {
+        const newJob = await this.useCase.createJob(req.body as BodyJobCreate);
+
+        if (newJob) {
+          return res.status(201).json(newJob);
+        }
+      } catch (error) {
+        console.log(error);
+        return res.status(400);
+      }
+    };
+  }
+
+  update() {
+    console.log("update route");
   }
   listAll() {
     return async (req: Request, res: Response) => {
@@ -36,5 +62,8 @@ export default class JobController {
         return res.status(400);
       }
     };
+  }
+  delete() {
+    console.log("delete route");
   }
 }

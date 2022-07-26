@@ -7,7 +7,16 @@ export default class JobRepository implements IRepository {
   constructor(jobModel: Model<IJob>) {
     this.jobModel = jobModel;
   }
-  async create(payload: any) {}
+  async create(payload: {
+    name: string;
+    description: string;
+    salary: number;
+    companyName: string;
+    status: string;
+    date: Date;
+  }) {
+    return await this.jobModel.create(payload);
+  }
   async find(payload?: any) {}
   async update(id: any, payload: any, condition?: any) {}
   async findAll(payload?: any) {
