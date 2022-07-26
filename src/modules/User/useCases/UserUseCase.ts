@@ -1,6 +1,6 @@
 import IRepository from "../../../repositories/IRepository";
 import bcrypt from "bcryptjs";
-const ObjectId = require('mongoose').Types.ObjectId;
+const ObjectId = require("mongoose").Types.ObjectId;
 
 type PayloadUserCreate = {
   name: string;
@@ -28,24 +28,6 @@ type PayloadUserUpdate = {
     salary: number;
     RG: String;
     CPF: String;
-  };
-};
-type PayloadUserList = {
-  name: string;
-
-  phone: string;
-
-  aboutMe: string;
-  profilePicture: string;
-  resume: {
-    employmentHistory: String[];
-    education: String[];
-    certificates: String[];
-    languages: String[];
-    linkedin: String;
-    portfolio: String;
-    address: String;
-    salary: number;
   };
 };
 
@@ -83,14 +65,14 @@ export default class UserUseCase {
     return updateUser;
   }
 
-  async listAll(){
+  async listAll() {
     const userList = await this.repository.findAll();
     return userList;
   }
 
   listUser(_id: any) {
     const isValidId = ObjectId.isValid(_id);
-    if(!isValidId) {
+    if (!isValidId) {
       return null;
     }
     const listUser = this.repository.findById(_id);

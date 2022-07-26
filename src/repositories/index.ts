@@ -1,6 +1,6 @@
 import UserRepository from "./User";
-import { User } from "../models";
-
+import { User, Job } from "../models";
+import JobRepository from "./Job";
 const userRepository = new UserRepository(User);
-
-export { userRepository };
+const jobRepository = new JobRepository(Job);
+export { userRepository, jobRepository };
