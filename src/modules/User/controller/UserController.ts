@@ -98,10 +98,8 @@ export default class UserController {
       try {
         const { _id } = req.params;
 
-        const listUser = await this.useCase.listUser(
-          _id,
-          req.body as BodyUserList
-        );
+        const listUser = await this.useCase.listUser(_id);
+
         return res.json(listUser);
       } catch (error) {
         console.log(error);

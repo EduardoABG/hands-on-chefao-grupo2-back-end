@@ -80,15 +80,8 @@ export default class UserUseCase {
     const updateUser = this.repository.update(_id, userData);
     return updateUser;
   }
-  listUser(_id: any, payload: PayloadUserList) {
-    const userList = {
-      name: payload.name,
-      phone: payload.phone,
-      profilePicture: payload.profilePicture,
-      aboutMe: payload.aboutMe,
-      resume: payload.resume,
-    };
-    const listUser = this.repository.findById(_id, userList);
+  listUser(_id: any) {
+    const listUser = this.repository.findById(_id);
     return listUser;
   }
 }

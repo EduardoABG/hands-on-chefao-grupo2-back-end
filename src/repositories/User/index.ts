@@ -44,26 +44,8 @@ export default class UserRepository implements IRepository {
     return this.userModel.updateOne({ _id: id }, payload);
   }
   async findAll(payload?: any) {}
-  async findById(
-    id: any,
-    payload?: {
-      name: string;
-      phone: string;
-      aboutMe: string;
-      profilePicture: string;
-      resume: {
-        employmentHistory: String[];
-        education: String[];
-        certificates: String[];
-        languages: String[];
-        linkedin: String;
-        portfolio: String;
-        address: String;
-        salary: number;
-      };
-    }
-  ) {
-    return this.userModel.findById({ _id: id }, payload);
+  async findById(id: any) {
+    return this.userModel.findById(id, ['-password', '-__v']);
   }
   async delete(id: any) {}
 }
