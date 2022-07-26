@@ -85,7 +85,7 @@ export default class UserController {
           _id,
           req.body as BodyUserUpdate
         );
-        return res.status(204).json(updateUser);
+        return res.status(201).json({ updateUser });
       } catch (error) {
         console.log(error);
         return res.status(400);
