@@ -21,7 +21,7 @@ export default class App {
   async setup(options: SetupOptions): Promise<void> {
     this.instance.use(cors());
     this.instance.use(Express.json());
-    //this.instance.use('/images', Express.static('public/images'));
+    this.instance.use('/docs', Express.static('docs'));
     await mongoDBConection.createConection();
     const selectedPort = options.port ? options.port : this.defaultPort;
     this.instance.use(BaseRoutes);
