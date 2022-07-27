@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import UserUseCase from "../useCases/UserUseCase";
 import User from "../../../models/User";
+import cloudinary from "../../../infra/config/cloudinary";
 
 type BodyUserCreate = {
   name: string;
@@ -66,7 +67,13 @@ export default class UserController {
         }
 
         const newUser = await this.useCase.createUser(
-          req.body as BodyUserCreate
+          {
+            name: req.body.name,
+            email: req.body.email,
+            password: req.body.password,
+            phone: req.body.phone,
+            profilePicture: req.file.path,
+          }
         );
         return res.status(201).json(newUser);
       } catch (error) {
@@ -79,13 +86,14 @@ export default class UserController {
   update() {
     return async (req: Request, res: Response) => {
       try {
-        const { _id } = req.params;
+        const { id } = req.params;
 
         const updateUser = await this.useCase.updateUser(
-          _id,
-          req.body as BodyUserUpdate
+          id,
+          req.body,
+          req.file
         );
-        return res.status(201).json(updateUser);
+        return res.status(200).json(updateUser);
       } catch (error) {
         console.log(error);
         return res.status(400);

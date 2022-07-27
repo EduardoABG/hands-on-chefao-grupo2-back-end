@@ -14,34 +14,39 @@ export default class UserRepository implements IRepository {
     phone: string;
     profilePicture: string;
   }) {
-    return await this.userModel.create(payload);
+    const newUser = await this.userModel.create(payload);
+    const result = await this.findById(newUser.id);
+    return result;
   }
   async find(payload?: any, id?: any) {}
   async update(
     id: any,
     payload: {
-      name: string;
-      email: string;
-      password: string;
-      phone: string;
-      birthDate: Date;
-      aboutMe: string;
-      profilePicture: string;
-      resume: {
-        employmentHistory: String[];
-        education: String[];
-        certificates: String[];
-        languages: String[];
-        linkedin: String;
-        portfolio: String;
-        address: String;
-        salary: number;
-        RG: String;
-        CPF: String;
-      };
+      name?: string;
+      email?: string;
+      password?: string;
+      phone?: string;
+      birthDate?: Date;
+      aboutMe?: string;
+      profilePicture?: string;
+      resume?: {
+        employmentHistory?: String[];
+        education?: String[];
+        certificates?: String[];
+        languages?: String[];
+        linkedin?: String;
+        portfolio?: String;
+        address?: String;
+        salary?: number;
+        RG?: String;
+        CPF?: String;
+      }
     }
   ) {
-    return await this.userModel.updateOne({ _id: id }, payload);
+
+    await this.userModel.findOneAndUpdate({ _id: id }, payload, { new: true });
+    const result = await this.findById(id);
+    return result;
   }
   async findAll() {
     const list = await this.userModel.find({}, ['-password', '-__v']);
