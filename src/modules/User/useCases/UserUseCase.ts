@@ -95,6 +95,7 @@ export default class UserUseCase {
       const cloudinaryRes = await cloudinary.uploader.upload(file.path,
       { public_id: payload.email });
       uploadResult = cloudinaryRes.secure_url;
+      fs.unlink(file.path, (err) => { return; });
     }
 
 
@@ -108,6 +109,7 @@ export default class UserUseCase {
       aboutMe: payload.aboutMe,
       resume: payload.resume,
     };
+
     const updateUser = this.repository.update(_id, userData);
     return updateUser;
   }

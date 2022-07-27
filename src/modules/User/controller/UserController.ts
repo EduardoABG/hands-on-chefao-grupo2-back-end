@@ -3,53 +3,7 @@ import UserUseCase from "../useCases/UserUseCase";
 import User from "../../../models/User";
 import cloudinary from "../../../infra/config/cloudinary";
 
-type BodyUserCreate = {
-  name: string;
-  email: string;
-  password: string;
-  phone: string;
-  profilePicture: string;
-};
-type BodyUserUpdate = {
-  name: string;
-  email: string;
-  password: string;
-  phone: string;
-  birthDate: Date;
-  aboutMe: string;
-  profilePicture: string;
-  resume: {
-    employmentHistory: String[];
-    education: String[];
-    certificates: String[];
-    languages: String[];
-    linkedin: String;
-    portfolio: String;
-    address: String;
-    salary: number;
-    RG: String;
-    CPF: String;
-  };
-};
 
-type BodyUserList = {
-  name: string;
-
-  phone: string;
-
-  aboutMe: string;
-  profilePicture: string;
-  resume: {
-    employmentHistory: String[];
-    education: String[];
-    certificates: String[];
-    languages: String[];
-    linkedin: String;
-    portfolio: String;
-    address: String;
-    salary: number;
-  };
-};
 export default class UserController {
   private useCase: UserUseCase;
   constructor(useCase: UserUseCase) {
