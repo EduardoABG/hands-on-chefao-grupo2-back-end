@@ -50,5 +50,7 @@ export default class UserRepository implements IRepository {
   async findById(id: any) {
     return this.userModel.findById(id, ['-password', '-__v']);
   }
-  async delete(id: any) {}
+  async delete(id: any) {
+    return await this.userModel.deleteOne({ _id: id });
+  }
 }

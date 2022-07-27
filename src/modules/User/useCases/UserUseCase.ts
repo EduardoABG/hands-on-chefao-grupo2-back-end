@@ -78,4 +78,9 @@ export default class UserUseCase {
     const listUser = this.repository.findById(_id);
     return listUser;
   }
+
+  async delete(id: any) {
+    const result = await this.repository.delete(id)
+    return result;
+  }
 }
