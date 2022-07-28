@@ -20,6 +20,10 @@ export default class UserController {
           return res.status(400).json("Este e-mail já está cadastrado.");
         }
 
+        if(!req.file) {
+          return res.status(400).json("O envio da foto de perfil é obrigatorio");
+        }
+
         const newUser = await this.useCase.createUser(
           {
             name: req.body.name,

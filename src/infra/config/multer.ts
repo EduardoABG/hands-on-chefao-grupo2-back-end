@@ -1,18 +1,15 @@
 import multer from "multer";
-import path from "path";
+import { v4 as uuid } from 'uuid';
 
-const multerCfg = multer({
+const upload = multer({
   storage: multer.diskStorage({
     destination: 'images/',
-  }),
-  fileFilter: (req, file, cb) => {
-    let ext = path.extname(file.originalname);
-    if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png") {
-      cb(null, false);
-      return;
-    }
-    cb(null, true);
-  }
-});
+    filename(req, file, callback) {
+      const fileName = `${uuid()}-${file.originalname}`
 
-export default multerCfg;
+      return callback(null, fileName)
+    },
+  }),
+})
+
+export default upload;

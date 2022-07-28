@@ -1,9 +1,7 @@
 import IRepository from "../../../repositories/IRepository";
 import bcrypt from "bcryptjs";
-import cloudinaryCFG from "../../../infra/config/cloudinary";
 import User from "../../../models/User";
-import { v2 as cloudinary } from "cloudinary";
-import fs from "fs";
+import UploadService from "../../../services/UploadService";
 const ObjectId = require("mongoose").Types.ObjectId;
 
 type filetype = {
@@ -56,8 +54,7 @@ export default class UserUseCase {
   async createUser(payload: PayloadUserCreate) {
     const hashedPassword = bcrypt.hashSync(payload.password, 10);
 
-    const uploadResult = await cloudinary.uploader.upload(payload.profilePicture,
-    { public_id: payload.email });
+    const uploadResult = await UploadService(payload.profilePicture);
 
     const userData = {
       name: payload.name,
@@ -66,8 +63,6 @@ export default class UserUseCase {
       phone: payload.phone,
       profilePicture: uploadResult.secure_url,
     };
-
-    fs.unlink(payload.profilePicture, (err) => { return; });
 
     const newUser = await this.repository.create(userData);
     return newUser;
@@ -92,12 +87,9 @@ export default class UserUseCase {
     }
 
     if(file) {
-      const cloudinaryRes = await cloudinary.uploader.upload(file.path,
-      { public_id: payload.email });
+      const cloudinaryRes = await UploadService(file.path);
       uploadResult = cloudinaryRes.secure_url;
-      fs.unlink(file.path, (err) => { return; });
     }
-
 
     const userData = {
       name: payload.name,
