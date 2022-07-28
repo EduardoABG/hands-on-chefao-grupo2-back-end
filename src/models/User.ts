@@ -20,6 +20,7 @@ export interface IUser {
         RG: String;
         CPF: String;
     };
+   favoriteJobs: String[];
 }
 
 // Const explicando para o mongoose:
@@ -56,7 +57,8 @@ const userSchema = new Schema <IUser> ({
         salary:{ type: Schema.Types.Number},
         RG:{ type: Schema.Types.String},
         CPF:{ type: Schema.Types.String},
-    }
+    },
+    favoriteJobs: [{ type: Schema.Types.String}]
 },
 {timestamps: true}
 );

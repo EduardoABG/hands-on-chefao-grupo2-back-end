@@ -42,6 +42,7 @@ type PayloadUserUpdate = {
     RG?: String;
     CPF?: String;
   };
+  favoriteJobs?: String[];
 };
 
 export default class UserUseCase {
@@ -100,6 +101,7 @@ export default class UserUseCase {
       birthDate: payload.birthDate,
       aboutMe: payload.aboutMe,
       resume: payload.resume,
+      favoriteJobs: payload.favoriteJobs,
     };
 
     const updateUser = this.repository.update(_id, userData);

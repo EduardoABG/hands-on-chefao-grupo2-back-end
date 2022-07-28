@@ -40,7 +40,8 @@ export default class UserRepository implements IRepository {
         salary?: number;
         RG?: String;
         CPF?: String;
-      }
+      };
+      favoriteJobs?: String[];
     }
   ) {
 
