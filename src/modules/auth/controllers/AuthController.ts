@@ -22,7 +22,6 @@ export default class AuthController {
         if (!login) {
           return res.status(400).json("Email not registred!");
         }
-        console.log(login.password);
         if (!bcrypt.compare(req.body.password, login.password)) {
           return res.status(401).json("Invalid password!");
         }
