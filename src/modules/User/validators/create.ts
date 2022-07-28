@@ -6,7 +6,7 @@ const createValidator = validate({
     email: Joi.string().email().required(),
     password: Joi.string().required(),
     phone: Joi.string().required(),
-    profilePicture: Joi.any(),
+    //profilePicture: Joi.any(),
   }),
 })
 
