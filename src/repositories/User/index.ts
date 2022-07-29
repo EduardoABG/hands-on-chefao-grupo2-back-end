@@ -14,9 +14,11 @@ export default class UserRepository implements IRepository {
     phone: string;
     profilePicture: string;
   }) {
-    const newUser = await this.userModel.create(payload);
-    const result = await this.findById(newUser.id);
-    return result;
+    const updatedUser = await this.userModel.create(payload);
+    if (updatedUser) {
+      const { password, __v, ...responseUser } = updatedUser._doc;
+      return { user: responseUser };
+    }
   }
   async find(payload?: any, id?: any) {}
   async update(
@@ -44,17 +46,22 @@ export default class UserRepository implements IRepository {
       favoriteJobs?: String[];
     }
   ) {
-
-    await this.userModel.findOneAndUpdate({ _id: id }, payload, { new: true });
-    const result = await this.findById(id);
-    return result;
+    const updatedUser = await this.userModel.findOneAndUpdate(
+      { _id: id },
+      payload,
+      { new: true }
+    );
+    if (updatedUser) {
+      const { password, __v, ...responseUser } = updatedUser._doc;
+      return { user: responseUser };
+    }
   }
   async findAll() {
-    const list = await this.userModel.find({}, ['-password', '-__v']);
+    const list = await this.userModel.find({}, ["-password", "-__v"]);
     return list;
   }
   async findById(id: any) {
-    return this.userModel.findById(id, ['-password', '-__v']);
+    return this.userModel.findById(id, ["-password", "-__v"]);
   }
   async delete(id: any) {
     return await this.userModel.deleteOne({ _id: id });
