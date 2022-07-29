@@ -25,7 +25,16 @@ export default class JobApplicationRepository implements IRepository {
     return await this.jobApplicationModel.create(payload);
   }
   async find(payload?: any) {}
-  async update(id: any, payload: any, condition?: any) {
+  async update(
+    id: any,
+    payload: {
+      status?: string;
+      feedback?: string;
+      tagsFeedback?: string[];
+      applicationDate: Date;
+    },
+    condition?: any
+  ) {
     return await this.jobApplicationModel.updateOne({ _id: id }, payload);
   }
   async findAll(payload?: any) {
