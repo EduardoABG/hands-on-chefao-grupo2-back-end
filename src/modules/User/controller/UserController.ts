@@ -11,51 +11,27 @@ export default class UserController {
   }
   create() {
     return async (req: Request, res: Response) => {
-      try {
-        const { email } = req.body;
-        const savedUser = await User.count({
+      const { name, email, password, phone } = req.body;
+
+      const newUser = await this.useCase.createUser({
+          name,
           email,
-        });
-        if (savedUser) {
-          return res.status(400).json("Este e-mail já está cadastrado.");
-        }
+          password,
+          phone,
+          profilePicture: req.file.path,
+      });
 
-        if(!req.file) {
-          return res.status(400).json("O envio da foto de perfil é obrigatorio");
-        }
-
-        const newUser = await this.useCase.createUser(
-          {
-            name: req.body.name,
-            email: req.body.email,
-            password: req.body.password,
-            phone: req.body.phone,
-            profilePicture: req.file.path,
-          }
-        );
-        return res.status(201).json(newUser);
-      } catch (error) {
-        console.log(error);
-        return res.status(400);
-      }
+      return res.status(201).json(newUser);
     };
   }
 
   update() {
     return async (req: Request, res: Response) => {
-      try {
-        const { id } = req.params;
+      const { id } = req.params;
 
-        const updateUser = await this.useCase.updateUser(
-          id,
-          req.body,
-          req.file
-        );
-        return res.status(200).json(updateUser);
-      } catch (error) {
-        console.log(error);
-        return res.status(400);
-      }
+      const updateUser = await this.useCase.updateUser(id, req.body, req.file);
+
+      return res.status(200).json(updateUser);
     };
   }
 
@@ -74,20 +50,15 @@ export default class UserController {
 
   list() {
     return async (req: Request, res: Response) => {
-      try {
-        const { id } = req.params;
+      const { id } = req.params;
 
-        const listUser = await this.useCase.listUser(id);
+      const listUser = await this.useCase.listUser(id);
 
-        if(!listUser) {
-          return res.status(404).json({ message: "Usuario não encontrado" });
-        }
-
-        return res.json(listUser);
-      } catch (error) {
-        console.log(error);
-        return res.status(400);
+      if(!listUser) {
+        return res.status(404).json({ message: "Usuario não encontrado" });
       }
+
+      return res.json(listUser);
     };
   }
 
@@ -98,7 +69,7 @@ export default class UserController {
         await this.useCase.delete(id);
         return res.status(204).json("");
       } catch (error) {
-        return res.status(500).json("");
+        return res.status(500).json({ statusCode: 500, message: "Internal Server Error" });
       }
     }
   }
