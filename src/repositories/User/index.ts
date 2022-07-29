@@ -1,12 +1,14 @@
-import IRepository from "../IRepository";
+import IUserRepository from "./IUserRepository";
 import { IUser } from "../../models/User";
 import { Model } from "mongoose";
 
-export default class UserRepository implements IRepository {
+export default class UserRepository implements IUserRepository {
   private userModel: any;
+
   constructor(userModel: Model<IUser>) {
     this.userModel = userModel;
   }
+
   async create(payload: {
     name: string;
     email: string;
@@ -14,11 +16,13 @@ export default class UserRepository implements IRepository {
     phone: string;
     profilePicture: string;
   }) {
-    const newUser = await this.userModel.create(payload);
-    const result = await this.findById(newUser.id);
-    return result;
+    const updatedUser = await this.userModel.create(payload);
+    if (updatedUser) {
+      const { password, __v, ...responseUser } = updatedUser._doc;
+      return { user: responseUser };
+    }
   }
-  async find(payload?: any, id?: any) {}
+
   async update(
     id: any,
     payload: {
@@ -44,18 +48,31 @@ export default class UserRepository implements IRepository {
       favoriteJobs?: String[];
     }
   ) {
-
-    await this.userModel.findOneAndUpdate({ _id: id }, payload, { new: true });
-    const result = await this.findById(id);
-    return result;
+    const updatedUser = await this.userModel.findOneAndUpdate(
+      { _id: id },
+      payload,
+      { new: true }
+    );
+    if (updatedUser) {
+      const { password, __v, ...responseUser } = updatedUser._doc;
+      return { user: responseUser };
+    }
   }
+
   async findAll() {
-    const list = await this.userModel.find({}, ['-password', '-__v']);
+    const list = await this.userModel.find({}, ["-password", "-__v"]);
     return list;
   }
+
   async findById(id: any) {
-    return this.userModel.findById(id, ['-password', '-__v']);
+    return await this.userModel.findById(id, ["-password", "-__v"]);
   }
+
+  async findByEmail(email: string) {
+    const user = await this.userModel.findOne({ email }, ["-password", "-__v"]);
+    return user;
+  }
+
   async delete(id: any) {
     return await this.userModel.deleteOne({ _id: id });
   }

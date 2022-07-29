@@ -1,6 +1,6 @@
 import Express, { Application } from "express";
 import { mongoDBConection } from "../database";
-import path from "path";
+require("express-async-errors");
 import BaseRoutes from "./BaseRoutes";
 import cors from "cors";
 import handleError from "./middlewares/handleError";
@@ -22,10 +22,12 @@ export default class App {
     this.instance.use(cors());
     this.instance.use(Express.json());
     this.instance.use('/docs', Express.static('docs'));
-    await mongoDBConection.createConection();
-    const selectedPort = options.port ? options.port : this.defaultPort;
     this.instance.use(BaseRoutes);
     this.instance.use(handleError);
+
+    await mongoDBConection.createConection();
+    const selectedPort = options.port ? options.port : this.defaultPort;
+
     cloudinary.config();
 
     if (options.isTest) return;

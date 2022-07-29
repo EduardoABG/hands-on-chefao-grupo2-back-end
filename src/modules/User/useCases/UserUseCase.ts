@@ -1,7 +1,8 @@
-import IRepository from "../../../repositories/IRepository";
+import IUserRepository from "../../../repositories/User/IUserRepository";
 import bcrypt from "bcryptjs";
 import User from "../../../models/User";
 import UploadService from "../../../services/UploadService";
+import AppError from "../../../errors/AppError";
 const ObjectId = require("mongoose").Types.ObjectId;
 
 type filetype = {
@@ -46,15 +47,24 @@ type PayloadUserUpdate = {
 };
 
 export default class UserUseCase {
-  private repository: IRepository;
+  private repository: IUserRepository;
 
-  constructor(userRepository: IRepository) {
+  constructor(userRepository: IUserRepository) {
     this.repository = userRepository;
   }
 
   async createUser(payload: PayloadUserCreate) {
-    const hashedPassword = bcrypt.hashSync(payload.password, 10);
 
+    const savedUser = await this.repository.findByEmail(payload.email);
+    if (savedUser) {
+      throw new AppError(400, "Este e-mail já está cadastrado");
+    }
+
+    if(!payload.profilePicture) {
+      throw new AppError(400, "O envio da foto de perfil é obrigatorio");
+    }
+
+    const hashedPassword = bcrypt.hashSync(payload.password, 10);
     const uploadResult = await UploadService(payload.profilePicture);
 
     const userData = {
@@ -68,19 +78,16 @@ export default class UserUseCase {
     const newUser = await this.repository.create(userData);
     return newUser;
   }
+
   async updateUser(_id: any, payload: PayloadUserUpdate, file?: filetype) {
     let hashedPassword;
     let uploadResult;
-    let constEmail;
 
     if(payload.email) {
-      const hasUser = await User.count({ email: payload.email })
+      const hasUser = await this.repository.findByEmail(payload.email);
       if(hasUser) {
-        return { msg: "Email já cadastrado" }
+        throw new AppError(400, "Este e-mail já está cadastrado");
       }
-    } else {
-      const hasUser = await this.repository.findById(_id);
-      payload.email = hasUser.email;
     }
 
     if(payload.password) {
@@ -89,6 +96,7 @@ export default class UserUseCase {
 
     if(file) {
       const cloudinaryRes = await UploadService(file.path);
+      if(!cloudinaryRes.secure_url) { throw new AppError(500, "Erro no upload de imagem") }
       uploadResult = cloudinaryRes.secure_url;
     }
 
@@ -104,8 +112,7 @@ export default class UserUseCase {
       favoriteJobs: payload.favoriteJobs,
     };
 
-    const updateUser = this.repository.update(_id, userData);
-    return updateUser;
+    return await this.repository.update(_id, userData);
   }
 
   async listAll() {
@@ -113,13 +120,10 @@ export default class UserUseCase {
     return userList;
   }
 
-  listUser(_id: any) {
-    const isValidId = ObjectId.isValid(_id);
-    if (!isValidId) {
-      return null;
-    }
-    const listUser = this.repository.findById(_id);
-    return listUser;
+  async listUser(_id: any) {
+    if (!ObjectId.isValid(_id)) { throw new AppError(400, "Id inválido") }
+
+    return await this.repository.findById(_id);
   }
 
   async delete(id: any) {
