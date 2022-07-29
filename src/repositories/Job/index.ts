@@ -14,11 +14,28 @@ export default class JobRepository implements IRepository {
     companyName: string;
     status: string;
     date: Date;
+    location: string;
+    jobPicture: string;
   }) {
     return await this.jobModel.create(payload);
   }
   async find(payload?: any) {}
-  async update(id: any, payload: any, condition?: any) {}
+  async update(
+    id: any,
+    payload: {
+      name: string;
+      description: string;
+      salary: number;
+      companyName: string;
+      status: string;
+      date: Date;
+      location: string;
+      jobPicture: string;})
+    {
+      await this.jobModel.findOneAndUpdate({ _id: id }, payload, { new: true });
+      const result = await this.findById(id);
+      return result;
+  }
   async findAll(payload?: any) {
     const list = await this.jobModel.find({});
     return list;

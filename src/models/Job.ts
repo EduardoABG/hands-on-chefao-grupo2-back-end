@@ -7,6 +7,8 @@ export interface IJob {
   companyName: string;
   status: string;
   date: Date;
+  location: string;
+  jobPicture: string;
 }
 
 // Const explicando para o mongoose:
@@ -28,6 +30,12 @@ const jobSchema = new Schema <IJob> ({
   },
   date: {
       type: Schema.Types.Date,
+  },
+  location: {
+    type: Schema.Types.String,
+  },
+  jobPicture: {
+    type: Schema.Types.String,
   },
 },
 {timestamps: true}
