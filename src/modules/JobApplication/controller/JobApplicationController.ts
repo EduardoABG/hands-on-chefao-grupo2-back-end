@@ -6,9 +6,9 @@ type BodyJobCreateApplication = {
   feedback: string;
   tagsFeedback: string[];
   applicationDate: Date;
-  user: number;
+  user: string;
   job: {
-    _id: number;
+    _id: string;
     name: string;
     companyName: string;
   };
