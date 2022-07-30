@@ -8,7 +8,7 @@ const updateValidator = validate({
     phone: Joi.string(),
     birthDate: Joi.date(),
     aboutMe: Joi.string(),
-    //profilePicture: Joi.any(),
+    profilePicture: Joi.any(),
     resume: Joi.object({
       employmentHistory: Joi.array().items(Joi.string()),
       education: Joi.array().items(Joi.string()),

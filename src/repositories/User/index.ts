@@ -1,4 +1,6 @@
 import IUserRepository from "./IUserRepository";
+import CreateUserDTO from "./dtos/CreateUserDTO";
+import UpdateUserDTO from "./dtos/UpdateUserDTO";
 import { IUser } from "../../models/User";
 import { Model } from "mongoose";
 
@@ -9,59 +11,20 @@ export default class UserRepository implements IUserRepository {
     this.userModel = userModel;
   }
 
-  async create(payload: {
-    name: string;
-    email: string;
-    password: string;
-    phone: string;
-    profilePicture: string;
-  }) {
-    const updatedUser = await this.userModel.create(payload);
-    if (updatedUser) {
-      const { password, __v, ...responseUser } = updatedUser._doc;
-      return { user: responseUser };
-    }
+  async create(payload: CreateUserDTO) {
+    const createdUser = await this.userModel.create(payload);
+    const { password, __v, ...response } = createdUser._doc;
+    return response;
   }
 
-  async update(
-    id: any,
-    payload: {
-      name?: string;
-      email?: string;
-      password?: string;
-      phone?: string;
-      birthDate?: Date;
-      aboutMe?: string;
-      profilePicture?: string;
-      resume?: {
-        employmentHistory?: String[];
-        education?: String[];
-        certificates?: String[];
-        languages?: String[];
-        linkedin?: String;
-        portfolio?: String;
-        address?: String;
-        salary?: number;
-        RG?: String;
-        CPF?: String;
-      };
-      favoriteJobs?: String[];
-    }
-  ) {
-    const updatedUser = await this.userModel.findOneAndUpdate(
-      { _id: id },
-      payload,
-      { new: true }
-    );
-    if (updatedUser) {
-      const { password, __v, ...responseUser } = updatedUser._doc;
-      return { user: responseUser };
-    }
+  async update(id: any, payload: UpdateUserDTO) {
+    const updatedUser = await this.userModel.findOneAndUpdate({ _id: id }, payload, { new: true });
+    const { password, __v, ...response } = updatedUser._doc;
+    return { user: response };
   }
 
   async findAll() {
-    const list = await this.userModel.find({}, ["-password", "-__v"]);
-    return list;
+    return await this.userModel.find({}, ["-password", "-__v"]);
   }
 
   async findById(id: any) {
@@ -69,8 +32,11 @@ export default class UserRepository implements IUserRepository {
   }
 
   async findByEmail(email: string) {
-    const user = await this.userModel.findOne({ email }, ["-password", "-__v"]);
-    return user;
+    return await this.userModel.findOne({ email }, ["-password", "-__v"]);
+  }
+
+  async count(payload: any) {
+    return await this.userModel.count(payload);
   }
 
   async delete(id: any) {

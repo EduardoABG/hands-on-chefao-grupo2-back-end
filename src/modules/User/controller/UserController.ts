@@ -1,24 +1,23 @@
 import { Request, Response } from "express";
 import UserUseCase from "../useCases/UserUseCase";
-import User from "../../../models/User";
-import cloudinary from "../../../infra/config/cloudinary";
-
 
 export default class UserController {
   private useCase: UserUseCase;
+
   constructor(useCase: UserUseCase) {
     this.useCase = useCase;
   }
+
   create() {
     return async (req: Request, res: Response) => {
-      const { name, email, password, phone } = req.body;
+      const { name, email, password, phone, profilePicture } = req.body;
 
       const newUser = await this.useCase.createUser({
           name,
           email,
           password,
           phone,
-          profilePicture: req.file ? { type: "cloudinary", value: req.file.path } : { type: "link", value: req.body.profilePicture },
+          profilePicture: req.file ? { type: "cloudinary", resource: req.file.path } : { type: "link", resource: profilePicture },
       });
 
       return res.status(201).json(newUser);
@@ -29,7 +28,11 @@ export default class UserController {
     return async (req: Request, res: Response) => {
       const { id } = req.params;
 
-      const updateUser = await this.useCase.updateUser(id, req.body, req.file);
+      const updateUser = await this.useCase.updateUser(
+        id,
+        req.body,
+        req.file ? { type: "cloudinary", resource: req.file.path } : { type: "link", resource: req.body.profilePicture },
+      );
 
       return res.status(200).json(updateUser);
     };
@@ -64,13 +67,10 @@ export default class UserController {
 
   delete() {
     return async (req: Request, res: Response) => {
-      try {
-        const { id } = req.params;
-        await this.useCase.delete(id);
-        return res.status(204).json("");
-      } catch (error) {
-        return res.status(500).json({ statusCode: 500, message: "Internal Server Error" });
-      }
+      const { id } = req.params;
+      await this.useCase.delete(id);
+
+      return res.status(204).json("");
     }
   }
 }

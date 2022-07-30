@@ -1,50 +1,10 @@
 import IUserRepository from "../../../repositories/User/IUserRepository";
+import CreateUserDTO from "./dtos/CreateUserDTO";
+import UpdateUserDTO from "./dtos/UpdateUserDTO"
 import bcrypt from "bcryptjs";
-import User from "../../../models/User";
 import UploadService from "../../../services/UploadService";
 import AppError from "../../../errors/AppError";
 const ObjectId = require("mongoose").Types.ObjectId;
-
-type filetype = {
-  fieldname: string;
-  originalname: string;
-  encoding: string;
-  mimetype: string;
-  destination: string;
-  filename: string;
-  path: string;
-  size: number;
-}
-
-type PayloadUserCreate = {
-  name: string;
-  email: string;
-  password: string;
-  phone: string;
-  profilePicture: string;
-};
-type PayloadUserUpdate = {
-  name?: string;
-  email?: string;
-  password?: string;
-  phone?: string;
-  birthDate?: Date;
-  aboutMe?: string;
-  profilePicture?: string;
-  resume?: {
-    employmentHistory?: String[];
-    education?: String[];
-    certificates?: String[];
-    languages?: String[];
-    linkedin?: String;
-    portfolio?: String;
-    address?: String;
-    salary?: number;
-    RG?: String;
-    CPF?: String;
-  };
-  favoriteJobs?: String[];
-};
 
 export default class UserUseCase {
   private repository: IUserRepository;
@@ -53,12 +13,10 @@ export default class UserUseCase {
     this.repository = userRepository;
   }
 
-  async createUser(payload: any/*PayloadUserCreate*/) {
+  async createUser({ name, email, password, phone, profilePicture: receivedPhoto }: CreateUserDTO) {
 
-    const { profilePicture: receivedPhoto } = payload;
-
-    const savedUser = await this.repository.findByEmail(payload.email);
-    if (savedUser) {
+    const userFoundByEmail = await this.repository.count({ email });
+    if (userFoundByEmail) {
       throw new AppError(400, "Este e-mail já está cadastrado");
     }
 
@@ -66,29 +24,33 @@ export default class UserUseCase {
       throw new AppError(400, "O envio da foto de perfil é obrigatorio");
     }
 
-    const hashedPassword = bcrypt.hashSync(payload.password, 10);
-
-    const uploadResult = receivedPhoto.type=="link" ? receivedPhoto.value : (await UploadService(receivedPhoto.value)).secure_url;
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    const uploadResult = receivedPhoto.type==="link" ? receivedPhoto.resource : (await UploadService(receivedPhoto.resource)).secure_url;
 
     const userData = {
-      name: payload.name,
-      email: payload.email,
+      name,
+      email,
       password: hashedPassword,
-      phone: payload.phone,
+      phone,
       profilePicture: uploadResult,
     };
 
-    const newUser = await this.repository.create(userData);
-    return newUser;
+    const createdUser = await this.repository.create(userData);
+    return createdUser;
   }
 
-  async updateUser(_id: any, payload: PayloadUserUpdate, file?: filetype) {
+  async updateUser(_id: any, payload: UpdateUserDTO, receivedPhoto?: any) {
     let hashedPassword;
     let uploadResult;
 
+    const hasUser = await this.repository.count({ _id });
+    if(!hasUser) {
+      throw new AppError(404, "Usuario não encontrado");
+    }
+
     if(payload.email) {
-      const hasUser = await this.repository.findByEmail(payload.email);
-      if(hasUser) {
+      const userFoundByEmail = await this.repository.count({ email: payload.email });
+      if(userFoundByEmail) {
         throw new AppError(400, "Este e-mail já está cadastrado");
       }
     }
@@ -97,10 +59,8 @@ export default class UserUseCase {
       hashedPassword = bcrypt.hashSync(payload.password, 10);
     }
 
-    if(file) {
-      const cloudinaryRes = await UploadService(file.path);
-      if(!cloudinaryRes.secure_url) { throw new AppError(500, "Erro no upload de imagem") }
-      uploadResult = cloudinaryRes.secure_url;
+    if(receivedPhoto) {
+      uploadResult = receivedPhoto.type==="link" ? receivedPhoto.resource : (await UploadService(receivedPhoto.resource)).secure_url;
     }
 
     const userData = {
@@ -119,18 +79,19 @@ export default class UserUseCase {
   }
 
   async listAll() {
-    const userList = await this.repository.findAll();
-    return userList;
+    return await this.repository.findAll();
   }
 
   async listUser(_id: any) {
     if (!ObjectId.isValid(_id)) { throw new AppError(400, "Id inválido") }
 
-    return await this.repository.findById(_id);
+    const user = await this.repository.findById(_id);
+    if(!user) { throw new AppError(404, "Usuario não encontrado") }
+
+    return user;
   }
 
   async delete(id: any) {
-    const result = await this.repository.delete(id)
-    return result;
+    return await this.repository.delete(id)
   }
 }

@@ -4,5 +4,6 @@ export default interface IRepository {
   findAll(payload?: any): Promise<any>;
   findById(payload?: any, id?: any): Promise<any>;
   findByEmail(email: string): Promise<any>;
+  count(payload: any): Promise<any>;
   delete(id: any): Promise<any>;
 }
