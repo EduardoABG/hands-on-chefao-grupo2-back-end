@@ -44,5 +44,7 @@ export default class JobApplicationRepository implements IRepository {
   async findById(id: any, payload?: any) {
     return this.jobApplicationModel.findById(id);
   }
-  async delete(id: any) {}
+  async delete(id: any) {
+    return await this.jobApplicationModel.deleteOne({ _id: id });
+  }
 }

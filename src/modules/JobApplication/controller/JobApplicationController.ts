@@ -89,20 +89,11 @@ export default class JobApplicationController {
   }
   delete() {
     return async (req: Request, res: Response) => {
-      try {
-        const { id } = req.params;
+      const { id } = req.params;
 
-        const deleteJobApplication = await this.useCase.deleteJobApplication(
-          id
-        );
-        if (!deleteJobApplication) {
-          return res.status(404).json({ message: "Processo encerrado" });
-        }
-        return res.status(200);
-      } catch (error) {
-        console.log(error);
-        return res.status(400);
-      }
+      await this.useCase.deleteJobApplication(id);
+
+      return res.status(204).json("");
     };
   }
 }

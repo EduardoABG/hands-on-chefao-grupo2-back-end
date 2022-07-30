@@ -1,4 +1,5 @@
 import IRepository from "../../../repositories/IRepository";
+import AppError from "../../../errors/AppError";
 const ObjectId = require("mongoose").Types.ObjectId;
 
 type PayloadJobApplicationCreate = {
@@ -63,12 +64,10 @@ export default class JobUseCase {
     return listJobApplication;
   }
 
-  deleteJobApplication(_id: any) {
+  async deleteJobApplication(_id: any) {
     const isValidId = ObjectId.isValid(_id);
-    if (!isValidId) {
-      return null;
-    }
-    const jobApplicationErase = this.repository.delete(_id);
-    return jobApplicationErase;
+    if (!isValidId) { throw new AppError(404, "Id inválido") }
+
+    return await this.repository.delete(_id);
   }
 }
