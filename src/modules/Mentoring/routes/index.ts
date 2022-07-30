@@ -3,10 +3,10 @@ import { mentoringController } from "../controller";
 
 const routes = Router();
 
-routes.get("/mentoring", mentoringController.listAll());
-routes.get("/mentoring/:id", mentoringController.list());
-routes.post("/mentoring", mentoringController.create());
-routes.put("/mentoring/:id", mentoringController.update());
-routes.delete("/mentoring/:id", mentoringController.delete());
+routes.get("/mentorings", mentoringController.listAll());
+routes.get("/mentorings/:id", mentoringController.list());
+routes.post("/mentorings", mentoringController.create());
+routes.put("/mentorings/:id", mentoringController.update());
+routes.delete("/mentorings/:id", mentoringController.delete());
 
 export default routes;

@@ -39,6 +39,6 @@ export default class MentoringRepository implements IRepository {
     return this.mentoringModel.findById(id);
   }
   async delete(id: any) {
-    return await this.mentoringModel.findByIdAndDelete(id);
+    return await this.mentoringModel.deleteOne({ _id: id });
   }
 }

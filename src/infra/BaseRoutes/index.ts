@@ -10,6 +10,7 @@ const routes = Router();
 routes.use(userRoutes);
 routes.use(jobRoutes);
 routes.use(authRoutes);
+routes.use(jobApplicationRoutes);
 routes.use(mentoringRoutes);
 routes.use(jobApplicationRoutes);
 

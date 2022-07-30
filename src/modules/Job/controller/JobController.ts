@@ -67,15 +67,13 @@ export default class JobController {
     return async (req: Request, res: Response) => {
       try {
         const { id } = req.params;
-
-        const deleteJob = await this.useCase.deleteJob(id);
-        if (!deleteJob) {
-          return res.status(404).json({ message: "Vaga não encontrada" });
-        }
-        return res.status(200);
+        await this.useCase.deleteJob(id);
+        return res.status(204).json("");
       } catch (error) {
         console.log(error);
-        return res.status(400);
+        return res
+          .status(500)
+          .json({ statusCode: 500, message: "Internal Server Error" });
       }
     };
   }
