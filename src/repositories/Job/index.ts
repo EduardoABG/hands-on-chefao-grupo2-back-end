@@ -30,18 +30,19 @@ export default class JobRepository implements IRepository {
       status: string;
       date: Date;
       location: string;
-      jobPicture: string;})
-    {
-      await this.jobModel.findOneAndUpdate({ _id: id }, payload, { new: true });
-      const result = await this.findById(id);
-      return result;
+      jobPicture: string;
+    }
+  ) {
+    await this.jobModel.findOneAndUpdate({ _id: id }, payload, { new: true });
+    const result = await this.findById(id);
+    return result;
   }
   async findAll(payload?: any) {
     const list = await this.jobModel.find({});
     return list;
   }
   async findById(id: any, payload?: any) {
-    return this.jobModel.findById(id);
+    return await this.jobModel.findById(id);
   }
   async delete(id: any) {
     return await this.jobModel.deleteOne({ _id: id });

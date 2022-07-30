@@ -33,10 +33,7 @@ export default class MentoringUseCase {
       description: payload.description,
       price: payload.price,
     };
-    const updateMentoring = this.repository.update(
-      _id,
-      mentoringData
-    );
+    const updateMentoring = this.repository.update(_id, mentoringData);
     return updateMentoring;
   }
   async listAll() {
@@ -53,7 +50,7 @@ export default class MentoringUseCase {
     return listMentoring;
   }
 
-  deleteMentoring(_id: any) {
+  async deleteMentoring(_id: any) {
     const isValidId = ObjectId.isValid(_id);
     if (!isValidId) {
       return null;
