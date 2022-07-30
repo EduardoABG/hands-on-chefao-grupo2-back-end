@@ -18,7 +18,7 @@ export default class UserController {
           email,
           password,
           phone,
-          profilePicture: req.file.path,
+          profilePicture: req.file ? { type: "cloudinary", value: req.file.path } : { type: "link", value: req.body.profilePicture },
       });
 
       return res.status(201).json(newUser);

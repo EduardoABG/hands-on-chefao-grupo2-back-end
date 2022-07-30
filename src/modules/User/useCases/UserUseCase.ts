@@ -53,26 +53,29 @@ export default class UserUseCase {
     this.repository = userRepository;
   }
 
-  async createUser(payload: PayloadUserCreate) {
+  async createUser(payload: any/*PayloadUserCreate*/) {
+
+    const { profilePicture: receivedPhoto } = payload;
 
     const savedUser = await this.repository.findByEmail(payload.email);
     if (savedUser) {
       throw new AppError(400, "Este e-mail já está cadastrado");
     }
 
-    if(!payload.profilePicture) {
+    if(!receivedPhoto) {
       throw new AppError(400, "O envio da foto de perfil é obrigatorio");
     }
 
     const hashedPassword = bcrypt.hashSync(payload.password, 10);
-    const uploadResult = await UploadService(payload.profilePicture);
+
+    const uploadResult = receivedPhoto.type=="link" ? receivedPhoto.value : (await UploadService(receivedPhoto.value)).secure_url;
 
     const userData = {
       name: payload.name,
       email: payload.email,
       password: hashedPassword,
       phone: payload.phone,
-      profilePicture: uploadResult.secure_url,
+      profilePicture: uploadResult,
     };
 
     const newUser = await this.repository.create(userData);
