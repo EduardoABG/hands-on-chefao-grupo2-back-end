@@ -20,8 +20,9 @@ const updateValidator = validate({
       salary: Joi.number(),
       RG: Joi.string(),
       CPF: Joi.string(),
-    })
+    }),
+    favoriteJobs: Joi.array().items(Joi.string()),
   }),
-})
+});
 
 export default updateValidator;
