@@ -12,6 +12,5 @@ routes.use(jobRoutes);
 routes.use(authRoutes);
 routes.use(jobApplicationRoutes);
 routes.use(mentoringRoutes);
-routes.use(jobApplicationRoutes);
 
 export default routes;
