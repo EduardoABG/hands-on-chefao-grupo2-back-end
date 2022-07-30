@@ -28,7 +28,8 @@ export default class MentoringRepository implements IRepository {
     },
 
   ) {
-    return await this.mentoringModel.updateOne({ _id: id }, payload);
+    return await this.mentoringModel.findOneAndUpdate({ _id: id }, payload, {new: true,});
+
   }
   async findAll(payload?: any) {
     const list = await this.mentoringModel.find({});
@@ -37,5 +38,7 @@ export default class MentoringRepository implements IRepository {
   async findById(id: any, payload?: any) {
     return this.mentoringModel.findById(id);
   }
-  async delete(id: any) {}
+  async delete(id: any) {
+    return await this.mentoringModel.findByIdAndDelete(id);
+  }
 }
