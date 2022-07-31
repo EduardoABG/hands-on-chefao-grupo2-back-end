@@ -1,6 +1,6 @@
 import IUserRepository from "../../../repositories/User/IUserRepository";
 import CreateUserDTO from "./dtos/CreateUserDTO";
-import UpdateUserDTO from "./dtos/UpdateUserDTO"
+import UpdateUserDTO from "./dtos/UpdateUserDTO";
 import bcrypt from "bcryptjs";
 import UploadService from "../../../services/UploadService";
 import AppError from "../../../errors/AppError";
@@ -20,7 +20,7 @@ export default class UserUseCase {
       throw new AppError(400, "Este e-mail já está cadastrado");
     }
 
-    if(!receivedPhoto) {
+    if(!receivedPhoto.resource) {
       throw new AppError(400, "O envio da foto de perfil é obrigatorio");
     }
 
