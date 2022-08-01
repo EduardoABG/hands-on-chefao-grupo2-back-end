@@ -12,8 +12,8 @@ export interface IJobApplication {
 	      text: string,
 	      link: string,
 	    }],
-	  }]
-  }
+	  }],
+  };
   applicationDate: Date;
   user: Schema.Types.ObjectId | IUser;
   job: {

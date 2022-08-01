@@ -13,11 +13,11 @@ export interface IJob {
   workingTime: string;
   workingMode: string;
   hiringRegime: string;
-  stage: {
-    title: string;
-	  numberOfCandidates: number;
-	  status: string;
-  }
+  stage: [{
+    title: string,
+	  numberOfCandidates: number,
+	  status: string,
+  }];
 }
 
 // Const explicando para o mongoose:
@@ -46,6 +46,29 @@ const jobSchema = new Schema <IJob> ({
   jobPicture: {
     type: Schema.Types.String,
   },
+  proficiency: {
+    type: Schema.Types.String,
+  },
+  workingTime: {
+    type: Schema.Types.String,
+  },
+  workingMode: {
+    type: Schema.Types.String,
+  },
+  hiringRegime: {
+    type: Schema.Types.String,
+  },
+  stage: [{
+    title: {
+      type: Schema.Types.String,
+    },
+	  numberOfCandidates: {
+      type: Schema.Types.Number,
+    },
+	  status: {
+      type: Schema.Types.String,
+    },
+  }],
 },
 {timestamps: true}
 );
