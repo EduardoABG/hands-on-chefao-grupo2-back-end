@@ -9,6 +9,15 @@ export interface IJob {
   date: Date;
   location: string;
   jobPicture: string;
+  proficiency: string;
+  workingTime: string;
+  workingMode: string;
+  hiringRegime: string;
+  stage: {
+    title: string;
+	  numberOfCandidates: number;
+	  status: string;
+  }
 }
 
 // Const explicando para o mongoose:

@@ -3,9 +3,17 @@ import { IUser } from "./User";
 import { IJob } from "./Job";
 
 export interface IJobApplication {
-  status: string;
-  feedback: string;
-  tagsFeedback: string[];
+  status: number;
+  feedback: {
+    letter:  string,
+    area: [{
+	    tittle: string,
+	    content: [{
+	      text: string,
+	      link: string,
+	    }],
+	  }]
+  }
   applicationDate: Date;
   user: Schema.Types.ObjectId | IUser;
   job: {
@@ -18,14 +26,18 @@ export interface IJobApplication {
 // Const explicando para o mongoose:
 const jobApplicationSchema = new Schema <IJobApplication> ({
   status: {
-      type: Schema.Types.String,
+      type: Schema.Types.Number,
   },
   feedback: {
-      type: Schema.Types.String,
+    letter:  Schema.Types.String,
+    area: [{
+	    tittle: Schema.Types.String,
+	    content: [{
+	      text: Schema.Types.String,
+	      link: Schema.Types.String,
+	    }],
+	  }]
   },
-  tagsFeedback: [{
-      type: Schema.Types.String,
-  }],
   applicationDate: {
       type: Schema.Types.Date,
   },
