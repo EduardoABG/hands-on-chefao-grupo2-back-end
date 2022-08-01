@@ -1,5 +1,6 @@
 import IRepository from "../../../repositories/IRepository";
 import AppError from "../../../errors/AppError";
+import JobApplicationStatus from "../../../constants/JobApplicationStatus"
 const ObjectId = require("mongoose").Types.ObjectId;
 
 type PayloadJobApplicationCreate = {
@@ -53,6 +54,11 @@ export default class JobUseCase {
   async listAll() {
     const jobApplicationList = await this.repository.findAll();
     return jobApplicationList;
+  }
+
+  async listInProgress() {
+    const inProgressList = await this.repository.find({ status: { $ne: 4}});
+    return inProgressList;
   }
 
   listJobApplication(_id: any) {

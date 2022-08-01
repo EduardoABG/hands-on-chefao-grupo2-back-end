@@ -5,6 +5,7 @@ import auth from "../../../infra/middlewares/auth";
 const routes = Router();
 
 routes.get("/jobApplications", jobApplicationController.listAll());
+routes.get("/jobApplications/progress", jobApplicationController.listInProgress());
 routes.get("/jobApplications/:id", auth, jobApplicationController.list());
 routes.post("/jobApplications", auth, jobApplicationController.create());
 routes.put("/jobApplications/:id", jobApplicationController.update());

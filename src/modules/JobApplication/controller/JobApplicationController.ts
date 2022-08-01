@@ -69,6 +69,23 @@ export default class JobApplicationController {
     };
   }
 
+  listInProgress() {
+    return async (req: Request, res: Response) => {
+      try {
+        const inProgressList = await this.useCase.listInProgress();
+
+        if (!inProgressList) {
+          return res.status(404).json({ message: "Processo encerrado" });
+        }
+
+        return res.json(inProgressList);
+      } catch (error) {
+        console.log(error);
+        return res.status(500);
+      }
+    };
+  }
+     
   list() {
     return async (req: Request, res: Response) => {
       try {

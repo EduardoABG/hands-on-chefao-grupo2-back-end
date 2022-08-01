@@ -21,4 +21,4 @@ const mentoringSchema = new Schema <IMentoring> ({
 {timestamps: true}
 );
 
-export default model<IMentoring>("Mentoring", mentoringSchema); 
+export default model<IMentoring>("Mentoring", mentoringSchema);
