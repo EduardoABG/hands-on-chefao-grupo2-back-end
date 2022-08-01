@@ -22,8 +22,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const data = JWT.verify(token, "CRUDGAMA");
-    //req.user = data as User;
+    const data = JWT.verify(token, "CHEFAO");
+    req.user = data as User;
     return next();
   } catch (e) {
     return res

@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { mentoringController } from "../controller";
-
 const routes = Router();
 
 routes.get("/mentorings", mentoringController.listAll());

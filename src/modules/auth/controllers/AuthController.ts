@@ -20,10 +20,10 @@ export default class AuthController {
         const login = await this.useCase.login(req.body as BodyLogin);
 
         if (!login) {
-          return res.status(400).json("Email not registred!");
+          return res.status(400).json("Email não registrado!");
         }
         if (!bcrypt.compare(req.body.password, login.password)) {
-          return res.status(401).json("Invalid password!");
+          return res.status(401).json("Senha invalida!");
         }
         const token = jwt.sign(
           {
@@ -31,9 +31,9 @@ export default class AuthController {
             email: login.email,
             nome: login.name,
           },
-          "OPENBANK"
+          "CHEFAO"
         );
-        return res.json(token);
+        return res.json({ token });
       } catch (error) {
         console.log(error);
         return res.status(400);
@@ -62,7 +62,7 @@ export default class AuthController {
 
         const token = CryptoJS.AES.encrypt(
           `${savedUser.email}`,
-          "OPENBANK"
+          "CHEFAO"
         ).toString();
         // enviar um email com o token
         savedUser.hashResetpassword = token;
