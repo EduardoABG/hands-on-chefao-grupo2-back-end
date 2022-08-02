@@ -1,34 +1,30 @@
 import IRepository from "../../../repositories/IRepository";
 import ListAllDTO from "./dtos/ListAllDTO";
 import CreateJobDTO from "./dtos/CreateJobDTO";
-import { pathToFileURL } from "url";
+import UpdateJobDTO from "./dtos/UpdateJobDTO";
+import AppError from "../../../errors/AppError";
 const ObjectId = require("mongoose").Types.ObjectId;
 
-type PayloadJobCreate = {
-  name: string;
-  description: string;
-  salary: number;
-  companyName: string;
-  status: string;
-  date: Date;
-};
 export default class JobUseCase {
   private repository: IRepository;
 
   constructor(jobRepository: IRepository) {
     this.repository = jobRepository;
   }
+
   async createJob(payload: CreateJobDTO) {
-    const jobData = {
-      name: payload.name,
-      description: payload.description,
-      salary: payload.salary,
-      companyName: payload.companyName,
-      status: payload.status,
-      date: payload.date,
-    };
     const newJob = await this.repository.create(payload as CreateJobDTO);
     return newJob;
+  }
+
+  async updateJob(id: string, payload: UpdateJobDTO) {
+
+    if(!ObjectId.isValid(id)) throw new AppError(400, "Id invalido");
+
+    const hasJob = await this.repository.findById(id);
+    if(!hasJob) throw new AppError(404, "Vaga não encontrada")
+
+    return await this.repository.update(id, payload);
   }
 
   async listAll(payload?: ListAllDTO) {
@@ -51,21 +47,18 @@ export default class JobUseCase {
     return await this.repository.findAll(dataObject);
   }
 
-  listJob(_id: any) {
-    const isValidId = ObjectId.isValid(_id);
-    if (!isValidId) {
-      return null;
-    }
-    const listJob = this.repository.findById(_id);
-    return listJob;
+  async listJob(id: any) {
+    if(!ObjectId.isValid(id)) throw new AppError(400, "Id invalido");
+
+    const jobList = await this.repository.findById(id);
+    if(!jobList) throw new AppError(404, "Vaga não encontrada");
+
+    return jobList;
   }
 
-  deleteJob(_id: any) {
-    const isValidId = ObjectId.isValid(_id);
-    if (!isValidId) {
-      return null;
-    }
-    const jobErase = this.repository.delete(_id);
-    return jobErase;
+  async deleteJob(id: any) {
+    if(!ObjectId.isValid(id)) throw new AppError(400, "Id invalido");
+
+    return await this.repository.delete(id);
   }
 }

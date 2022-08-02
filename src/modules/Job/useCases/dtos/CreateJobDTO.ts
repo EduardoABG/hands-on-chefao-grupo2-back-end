@@ -11,7 +11,7 @@ export default interface CreateJobDTO {
   workingTime: string;
   workingMode: string;
   hiringRegime: string;
-  stage?: [{
+  stage: [{
     title: string,
 	  numberOfCandidates: number,
 	  status: string,

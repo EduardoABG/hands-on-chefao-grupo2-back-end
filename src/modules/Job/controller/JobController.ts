@@ -19,7 +19,13 @@ export default class JobController {
   }
 
   update() {
-    console.log("update route");
+    return async (req: Request, res: Response) => {
+      const { id } = req.params;
+
+      const updateJob = await this.useCase.updateJob(id, req.body);
+
+      return res.status(200).json(updateJob)
+    }
   }
 
   listAll() {
@@ -32,34 +38,20 @@ export default class JobController {
 
   list() {
     return async (req: Request, res: Response) => {
-      try {
-        const { id } = req.params;
+      const { id } = req.params;
 
-        const listJob = await this.useCase.listJob(id);
+      const listJob = await this.useCase.listJob(id);
 
-        if (!listJob) {
-          return res.status(404).json({ message: "Vaga não encontrada" });
-        }
-
-        return res.json(listJob);
-      } catch (error) {
-        console.log(error);
-        return res.status(400);
-      }
+      return res.json(listJob);
     };
   }
   delete() {
     return async (req: Request, res: Response) => {
-      try {
-        const { id } = req.params;
-        await this.useCase.deleteJob(id);
-        return res.status(204).json("");
-      } catch (error) {
-        console.log(error);
-        return res
-          .status(500)
-          .json({ statusCode: 500, message: "Internal Server Error" });
-      }
+      const { id } = req.params;
+
+      await this.useCase.deleteJob(id);
+
+      return res.status(204).json("");
     };
   }
 }
