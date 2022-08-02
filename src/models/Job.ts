@@ -21,7 +21,7 @@ export interface IJob {
 }
 
 // Const explicando para o mongoose:
-const jobSchema = new Schema <IJob> ({
+export const jobSchema = new Schema <IJob> ({
   name: {
       type: Schema.Types.String,
   },
@@ -70,7 +70,9 @@ const jobSchema = new Schema <IJob> ({
     },
   }],
 },
-{timestamps: true}
+{ timestamps: true }
 );
+
+jobSchema.index({ "$**": "text" })
 
 export default model<IJob>("Job", jobSchema); // Dará as diversas funções para manipular os dados dentro do mongoose.

@@ -1,4 +1,7 @@
 import IRepository from "../../../repositories/IRepository";
+import ListAllDTO from "./dtos/ListAllDTO";
+import CreateJobDTO from "./dtos/CreateJobDTO";
+import { pathToFileURL } from "url";
 const ObjectId = require("mongoose").Types.ObjectId;
 
 type PayloadJobCreate = {
@@ -15,7 +18,7 @@ export default class JobUseCase {
   constructor(jobRepository: IRepository) {
     this.repository = jobRepository;
   }
-  async createJob(payload: PayloadJobCreate) {
+  async createJob(payload: CreateJobDTO) {
     const jobData = {
       name: payload.name,
       description: payload.description,
@@ -24,13 +27,28 @@ export default class JobUseCase {
       status: payload.status,
       date: payload.date,
     };
-    const newJob = await this.repository.create(jobData);
+    const newJob = await this.repository.create(payload as CreateJobDTO);
     return newJob;
   }
 
-  async listAll() {
-    const jobList = await this.repository.findAll();
-    return jobList;
+  async listAll(payload?: ListAllDTO) {
+
+    const dataObject: {
+      $text?: Object;
+      description?: Object;
+      proficiency?: string;
+      workingTime?: string;
+      workingMode?: string;
+      hiringRegime?: string;
+    } = {};
+
+    if(payload?.search) { dataObject.$text = { $search : payload?.search } };
+    if(payload?.proficiency) dataObject.proficiency = payload.proficiency;
+    if(payload?.workingtime) dataObject.workingTime = payload.workingtime;
+    if(payload?.workingmode) dataObject.workingMode = payload.workingmode;
+    if(payload?.hiringregime) dataObject.hiringRegime = payload.hiringregime;
+
+    return await this.repository.findAll(dataObject);
   }
 
   listJob(_id: any) {

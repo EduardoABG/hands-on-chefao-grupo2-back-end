@@ -7,16 +7,7 @@ export default class JobRepository implements IRepository {
   constructor(jobModel: Model<IJob>) {
     this.jobModel = jobModel;
   }
-  async create(payload: {
-    name: string;
-    description: string;
-    salary: number;
-    companyName: string;
-    status: string;
-    date: Date;
-    location: string;
-    jobPicture: string;
-  }) {
+  async create(payload: any) {
     return await this.jobModel.create(payload);
   }
   async find(payload?: any) {}
@@ -38,8 +29,7 @@ export default class JobRepository implements IRepository {
     return result;
   }
   async findAll(payload?: any) {
-    const list = await this.jobModel.find({});
-    return list;
+    return await this.jobModel.find(payload);
   }
   async findById(id: any, payload?: any) {
     return await this.jobModel.findById(id);

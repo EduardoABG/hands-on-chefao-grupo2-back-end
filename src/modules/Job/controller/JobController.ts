@@ -1,31 +1,19 @@
 import { Request, Response } from "express";
 import JobUseCase from "../useCases/JobUseCase";
 
-type BodyJobCreate = {
-  name: string;
-  description: string;
-  salary: number;
-  companyName: string;
-  status: string;
-  date: Date;
-};
-
 export default class JobController {
   private useCase: JobUseCase;
+
   constructor(useCase: JobUseCase) {
     this.useCase = useCase;
   }
+
   create() {
     return async (req: Request, res: Response) => {
-      try {
-        const newJob = await this.useCase.createJob(req.body as BodyJobCreate);
+      const newJob = await this.useCase.createJob(req.body);
 
-        if (newJob) {
-          return res.status(201).json(newJob);
-        }
-      } catch (error) {
-        console.log(error);
-        return res.status(400);
+      if (newJob) {
+        return res.status(201).json(newJob);
       }
     };
   }
@@ -33,15 +21,12 @@ export default class JobController {
   update() {
     console.log("update route");
   }
+
   listAll() {
     return async (req: Request, res: Response) => {
-      try {
-        const jobList = await this.useCase.listAll();
-        return res.json(jobList);
-      } catch (error) {
-        console.log(error);
-        return res.status(500);
-      }
+      const jobList = await this.useCase.listAll(req.query)
+
+      return res.json(jobList);
     };
   }
 
