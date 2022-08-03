@@ -11,9 +11,7 @@ export default class JobApplicationRepository implements IRepository {
     this.jobApplicationModel = jobApplicationModel;
   }
   async create(payload: {
-    status: string;
-    feedback: string;
-    tagsFeedback: string[];
+    status: number;
     applicationDate: Date;
     user: Schema.Types.ObjectId | IUser;
     job: {

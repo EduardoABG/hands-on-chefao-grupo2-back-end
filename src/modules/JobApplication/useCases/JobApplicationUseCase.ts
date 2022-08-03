@@ -4,9 +4,7 @@ import JobApplicationStatus from "../../../constants/JobApplicationStatus"
 const ObjectId = require("mongoose").Types.ObjectId;
 
 type PayloadJobApplicationCreate = {
-  status: string;
-  feedback: string;
-  tagsFeedback: string[];
+  status: number;
   applicationDate: Date;
   user: string;
   job: {
@@ -16,9 +14,17 @@ type PayloadJobApplicationCreate = {
   };
 };
 type PayloadJobApplicationUpdate = {
-  status: string;
-  feedback: string;
-  tagsFeedback: string[];
+  status: number;
+  feedback: {
+    letter:  string,
+    area: [{
+	    tittle: string,
+	    content: [{
+	      text: string,
+	      link: string,
+	    }]
+	  }]
+  };
 };
 export default class JobUseCase {
   private repository: IRepository;
@@ -29,8 +35,6 @@ export default class JobUseCase {
   async createJobApplication(payload: PayloadJobApplicationCreate) {
     const jobApplicationData = {
       status: payload.status,
-      feedback: payload.feedback,
-      tagsFeedback: payload.tagsFeedback,
       applicationDate: payload.applicationDate,
       user: payload.user,
       job: payload.job,
@@ -43,7 +47,6 @@ export default class JobUseCase {
     const jobApplicationData = {
       status: payload.status,
       feedback: payload.feedback,
-      tagsFeedback: payload.tagsFeedback,
     };
     const updateJobApplication = this.repository.update(
       _id,
