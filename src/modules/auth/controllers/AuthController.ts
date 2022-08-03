@@ -5,41 +5,32 @@ import jwt from "jsonwebtoken";
 import logger from "../../../infra/logger";
 import CryptoJS from "crypto-js";
 
-type BodyLogin = {
-  email: string;
-  password: string;
-};
 export default class AuthController {
   private useCase: AuthUseCase;
+
   constructor(useCase: AuthUseCase) {
     this.useCase = useCase;
   }
+
   login() {
     return async (req: Request, res: Response) => {
-      try {
-        const login = await this.useCase.login(req.body as BodyLogin);
+        const { email, password } = req.body
 
-        if (!login) {
-          return res.status(400).json("Email não registrado!");
-        }
-        if (!bcrypt.compare(req.body.password, login.password)) {
-          return res.status(401).json("Senha invalida!");
-        }
-        const token = jwt.sign(
-          {
-            id: login.id,
-            email: login.email,
-            nome: login.name,
-          },
-          "CHEFAO"
-        );
-        return res.json({ token });
-      } catch (error) {
-        console.log(error);
-        return res.status(400);
-      }
+        const result = await this.useCase.login({ email, password });
+
+        return res.json({ token: result });
     };
   }
+
+  loginWithGoogle() {
+    return async (req: Request, res: Response) => {
+      const { name, email, picture } = req.user as User;
+      const result = await this.useCase.signInWithGoogle({ name, email, picture });
+
+      return res.status(200).json(result)
+    }
+  }
+
   tokenGenerator() {
     return async (req: Request, res: Response) => {
       try {
@@ -49,7 +40,7 @@ export default class AuthController {
           )} client_ip=${req.ips}`
         );
         const savedUser = await this.useCase.generatePasswordToken(
-          req.body as BodyLogin
+          req.body
         );
         if (!savedUser) {
           logger.error(`[generatePasswordToken] user not found`);

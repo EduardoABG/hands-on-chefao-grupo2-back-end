@@ -1,20 +1,19 @@
 import { IUser } from "../../models/User";
-import IRepository from "../IRepository";
+import IAuthRepository from "./IAuthRepository";
 import { Model } from "mongoose";
 
-export default class AuthRepository implements IRepository {
+export default class AuthRepository implements IAuthRepository {
   private login: any;
 
   constructor(loginModel: Model<IUser>) {
     this.login = loginModel;
   }
-  async find(payload?: { email: string; password: string }) {
-    return await this.login.findOne({ email: payload?.email }, ["+password"]);
-  }
-  async findById(payload?: any, id?: any) {}
-  async create(payload: any) {}
-  async update(payload: any, id: any) {}
-  async findAll(payload?: any) {}
 
-  async delete(id: any) {}
+  async find(payload?: any) {
+    return await this.login.findOne(payload);
+  }
+
+  async count(payload?: any) {
+    return await this.login.count(payload);
+  }
 }

@@ -1,14 +1,16 @@
 import { Request, Response, NextFunction } from "express";
 import JWT from "jsonwebtoken";
+import ENV from "../config/env";
+import GoogleAuthService from "../../services/GoogleAuthService";
+import { authUseCase } from "../../modules/auth/useCase";
 
-export default (req: Request, res: Response, next: NextFunction) => {
+export default async (req: Request, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
 
   if (!authorization) {
     return res.status(401).json({ message: "O token não especificado" });
   }
 
-  ("JWT token");
   const partsToken = authorization.split(" ");
 
   if (partsToken.length !== 2) {
@@ -22,10 +24,31 @@ export default (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const data = JWT.verify(token, "CHEFAO");
+    const GoogleAuth = new GoogleAuthService();
+    const isGoogleToken = GoogleAuth.isGoogleToken(token);
+
+    if(isGoogleToken) {
+      const checkedToken = await GoogleAuth.checkToken(token);
+      if(!checkedToken) throw new Error();
+
+      const data = {
+        name: checkedToken.name,
+        email: checkedToken.email,
+        picture: checkedToken.picture,
+      }
+
+      await authUseCase.signInWithGoogle(data);
+
+      req.user = data as User;
+      return next();
+    }
+
+    const data = JWT.verify(token, ENV.JWT_SECRET);
     req.user = data as User;
     return next();
+
   } catch (e) {
+
     return res
       .status(401)
       .json({ message: "Token invalido! Faça login novamente!" });

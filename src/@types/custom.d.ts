@@ -1,8 +1,7 @@
 type User = {
-  id: number;
-  nome: string;
+  name: string;
   email: string;
-  password: string;
+  picture: string;
 };
 
 interface filetype {
