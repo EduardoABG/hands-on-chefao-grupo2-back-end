@@ -64,6 +64,11 @@ export default class JobUseCase {
     return inProgressList;
   }
 
+  async listFinished() {
+    const inProgressList = await this.repository.find({ status: 4});
+    return inProgressList;
+  }
+
   listJobApplication(_id: any) {
     const isValidId = ObjectId.isValid(_id);
     if (!isValidId) {

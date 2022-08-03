@@ -2,9 +2,7 @@ import { Request, Response } from "express";
 import JobApplicationUseCase from "../useCases/JobApplicationUseCase";
 
 type BodyJobCreateApplication = {
-  status: string;
-  feedback: string;
-  tagsFeedback: string[];
+  status: number;
   applicationDate: Date;
   user: string;
   job: {
@@ -13,10 +11,18 @@ type BodyJobCreateApplication = {
     companyName: string;
   };
 };
-type BodyobApplicationUpdate = {
-  status: string;
-  feedback: string;
-  tagsFeedback: string[];
+type BodyJobApplicationUpdate = {
+  status: number;
+  feedback: {
+    letter:  string,
+    area: [{
+	    tittle: string,
+	    content: [{
+	      text: string,
+	      link: string,
+	    }]
+	  }]
+  };
 };
 export default class JobApplicationController {
   private useCase: JobApplicationUseCase;
@@ -47,7 +53,7 @@ export default class JobApplicationController {
 
         const updateJobApplication = await this.useCase.updateJobApplication(
           id,
-          req.body as BodyobApplicationUpdate
+          req.body as BodyJobApplicationUpdate
         );
         return res.status(200).json(updateJobApplication);
       } catch (error) {
@@ -85,7 +91,24 @@ export default class JobApplicationController {
       }
     };
   }
-     
+
+  listFinished() {
+    return async (req: Request, res: Response) => {
+      try {
+        const finishedList = await this.useCase.listFinished();
+
+        if (!finishedList) {
+          return res.status(404).json({ message: "Processo encerrado" });
+        }
+
+        return res.json(finishedList);
+      } catch (error) {
+        console.log(error);
+        return res.status(500);
+      }
+    };
+  }
+
   list() {
     return async (req: Request, res: Response) => {
       try {
