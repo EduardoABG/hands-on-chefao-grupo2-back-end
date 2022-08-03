@@ -37,14 +37,18 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         picture: checkedToken.picture,
       }
 
-      await authUseCase.signInWithGoogle(data);
+      const signedUser = await authUseCase.signInWithGoogle(data);
 
-      req.user = data as User;
+      req.user = { ...data, id: signedUser._id } as User;
+      console.log(req.user);
+
       return next();
     }
 
     const data = JWT.verify(token, ENV.JWT_SECRET);
     req.user = data as User;
+    console.log(req.user);
+
     return next();
 
   } catch (e) {

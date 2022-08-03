@@ -28,7 +28,7 @@ export default class AuthUseCase {
 
     const token = jwt.sign(
       {
-        id: user.id,
+        id: user._id,
         email: user.email,
         name: user.name,
       },
