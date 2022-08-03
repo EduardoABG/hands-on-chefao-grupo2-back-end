@@ -11,8 +11,8 @@ export interface IJobApplication {
 	    content: [{
 	      text: string,
 	      link: string,
-	    }],
-	  }],
+	    }]
+	  }]
   };
   applicationDate: Date;
   user: Schema.Types.ObjectId | IUser;
@@ -35,7 +35,7 @@ const jobApplicationSchema = new Schema <IJobApplication> ({
 	    content: [{
 	      text: Schema.Types.String,
 	      link: Schema.Types.String,
-	    }],
+	    }]
 	  }]
   },
   applicationDate: {
