@@ -22,7 +22,9 @@ export default class JobApplicationRepository implements IRepository {
   }) {
     return await this.jobApplicationModel.create(payload);
   }
-  async find(payload?: any) {}
+  async find(payload?: any) {
+    return await this.jobApplicationModel.find(payload);
+  }
   async update(
     id: any,
     payload: {
