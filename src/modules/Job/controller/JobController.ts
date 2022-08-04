@@ -54,4 +54,14 @@ export default class JobController {
       return res.status(204).json("");
     };
   }
+
+  candidatesCounter() {
+    return async (req: Request, res: Response) => {
+      const { id } = req.params;
+
+      const candidatesNumber = await this.useCase.candidatesCounter(id)
+
+      return res.status(200).json({ jobId: id, candidatesNumber });
+    }
+  }
 }

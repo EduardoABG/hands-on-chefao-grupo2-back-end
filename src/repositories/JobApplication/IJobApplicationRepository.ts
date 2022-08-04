@@ -3,6 +3,7 @@ export default interface IRepository {
   update(id: any, payload: any, condition?: any): Promise<any>;
   findAll(payload?: any): Promise<any>;
   findById(payload?: any, id?: any): Promise<any>;
-  findByStatus(status: number): Promise<any>;
+  findByStatus(status: any): Promise<any>;
   delete(id: any): Promise<any>;
+  count(id: any): Promise<any>;
 }

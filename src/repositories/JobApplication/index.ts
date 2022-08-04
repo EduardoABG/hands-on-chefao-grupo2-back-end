@@ -1,9 +1,9 @@
-import IRepository from "../IRepository";
+import IJobApplicationRepository from "./IJobApplicationRepository";
 import { IJobApplication } from "../../models/JobApplication";
 import { Model } from "mongoose";
 import CreateJobDTO from "../../modules/Job/useCases/dtos/CreateJobDTO";
 
-export default class JobApplicationRepository implements IRepository {
+export default class JobApplicationRepository implements IJobApplicationRepository {
   private jobApplicationModel: any;
 
   constructor(jobApplicationModel: Model<IJobApplication>) {
@@ -39,12 +39,16 @@ export default class JobApplicationRepository implements IRepository {
   async findById(id: any, payload?: any) {
     return await this.jobApplicationModel.findById(id);
   }
-  
-  async findByStatus(status: { $ne: 4}) {
+
+  async findByStatus(status: any) {
     return await this.jobApplicationModel.find(status);
   };
 
   async delete(id: any) {
     return await this.jobApplicationModel.deleteOne({ _id: id });
+  }
+
+  async count(id: any) {
+    return await this.jobApplicationModel.count({ "job._id": id });
   }
 }

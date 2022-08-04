@@ -1,5 +1,5 @@
-import { jobRepository } from "../../../repositories";
+import { jobRepository, jobApplicationRepository } from "../../../repositories";
 import JobUseCase from "./JobUseCase";
 
-const jobUseCase = new JobUseCase(jobRepository);
+const jobUseCase = new JobUseCase(jobRepository, jobApplicationRepository);
 export { jobUseCase };
