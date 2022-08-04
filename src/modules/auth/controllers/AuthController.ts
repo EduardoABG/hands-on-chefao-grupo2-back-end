@@ -18,7 +18,7 @@ export default class AuthController {
 
         const result = await this.useCase.login({ email, password });
 
-        return res.json({ token: result });
+        return res.json(result);
     };
   }
 

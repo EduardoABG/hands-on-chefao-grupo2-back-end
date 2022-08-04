@@ -36,7 +36,7 @@ export default class AuthUseCase {
       { expiresIn: '3d' }
     );
 
-    return token;
+    return { id: user._id, token };
   }
 
   async signInWithGoogle({ name, email, picture }: GoogleSignDTO) {
