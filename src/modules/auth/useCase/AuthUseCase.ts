@@ -16,12 +16,12 @@ export default class AuthUseCase {
     this.UserRepository = userRepository;
   }
 
-  async login({ email, password }: LoginDTO) {
+  async login({ email, password: userPass }: LoginDTO) {
 
     const user = await this.AuthRepository.find({ email });
     if(!user) throw new AppError(400, "Credenciais invalidas");
 
-    const isValidPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await bcrypt.compare(userPass, user.password);
     if (!isValidPassword) {
       throw new AppError(400, "Credenciais invalidas");
     }
@@ -36,7 +36,9 @@ export default class AuthUseCase {
       { expiresIn: '3d' }
     );
 
-    return { id: user._id, token };
+    const { password, __v, ...userFormated } = user._doc
+
+    return { user: userFormated, token };
   }
 
   async signInWithGoogle({ name, email, picture }: GoogleSignDTO) {
