@@ -20,9 +20,9 @@ export default class UserUseCase {
       throw new AppError(400, "Este e-mail já está cadastrado");
     }
 
-    if(!receivedPhoto.resource) {
+    /*if(!receivedPhoto.resource) {
       throw new AppError(400, "O envio da foto de perfil é obrigatorio");
-    }
+    }*/
 
     const hashedPassword = bcrypt.hashSync(password, 10);
     const uploadResult = receivedPhoto.type==="link" ? receivedPhoto.resource : (await UploadService(receivedPhoto.resource)).secure_url;
