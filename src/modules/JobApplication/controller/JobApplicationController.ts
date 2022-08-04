@@ -120,4 +120,13 @@ export default class JobApplicationController {
       return res.status(204).json("");
     };
   }
+
+  dashboard() {
+    return async (req: Request, res: Response) => {
+      const { id } = req.user as User;
+
+      const result = await this.useCase.dashboard(id);
+      return res.status(200).json(result);
+    }
+  }
 }

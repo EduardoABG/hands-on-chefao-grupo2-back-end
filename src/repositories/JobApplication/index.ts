@@ -51,4 +51,8 @@ export default class JobApplicationRepository implements IJobApplicationReposito
   async count(id: any) {
     return await this.jobApplicationModel.count({ "job._id": id });
   }
+
+  async dashboardCount(payload: any) {
+    return await this.jobApplicationModel.count(payload);
+  }
 }

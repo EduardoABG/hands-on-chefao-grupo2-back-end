@@ -1,3 +1,4 @@
+import IJobApplicationRepository from "../../../repositories/JobApplication/IJobApplicationRepository";
 import IRepository from "../../../repositories/IRepository";
 import AppError from "../../../errors/AppError";
 const ObjectId = require("mongoose").Types.ObjectId;
@@ -21,10 +22,10 @@ type PayloadJobApplicationUpdate = {
   };
 };
 export default class JobUseCase {
-  private jobApplicationRepository: IRepository;
+  private jobApplicationRepository: IJobApplicationRepository;
   private jobRepository: IRepository;
 
-  constructor(jobApplicationRepository: IRepository, jobRepository: IRepository) {
+  constructor(jobApplicationRepository: IJobApplicationRepository, jobRepository: IRepository) {
     this.jobApplicationRepository = jobApplicationRepository;
     this.jobRepository = jobRepository;
   }
@@ -98,5 +99,13 @@ export default class JobUseCase {
     if(jobApplication.user != userId) { throw new AppError(403, "Não autorizado") }
 
     return await this.jobApplicationRepository.delete(_id);
+  }
+
+  async dashboard(userId: string) {
+    const views = await this.jobApplicationRepository.dashboardCount({  status: 1 });
+    const inProgress = await this.jobApplicationRepository.dashboardCount({ status: { $ne: 4} });
+    const finished = await this.jobApplicationRepository.dashboardCount({ status: 4 });
+
+    return { views: views, inProgress: inProgress, finished: finished }
   }
 }
