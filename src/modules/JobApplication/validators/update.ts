@@ -13,13 +13,6 @@ const updateValidator = validate({
         }))
       }))
     }),
-    applicationDate: Joi.date(),
-    user: Joi.string(),
-    job: Joi.object({
-      _id: Joi.string(),
-      name: Joi.string(),
-      companyName: Joi.string()
-    })
   }),
 });
 

@@ -1,6 +1,7 @@
 import IJobApplicationRepository from "../../../repositories/JobApplication/IJobApplicationRepository";
 import IRepository from "../../../repositories/IRepository";
 import AppError from "../../../errors/AppError";
+import JobApplicationUpdateDTO from "./dtos/UpdateDTO";
 const ObjectId = require("mongoose").Types.ObjectId;
 
 type CreateJobApplicationDTO = {
@@ -8,19 +9,7 @@ type CreateJobApplicationDTO = {
   jobId: string;
 };
 
-type PayloadJobApplicationUpdate = {
-  status: number;
-  feedback: {
-    letter:  string,
-    area: [{
-	    tittle: string,
-	    content: [{
-	      text: string,
-	      link: string,
-	    }]
-	  }]
-  };
-};
+
 export default class JobUseCase {
   private jobApplicationRepository: IJobApplicationRepository;
   private jobRepository: IRepository;
@@ -53,11 +42,9 @@ export default class JobUseCase {
     return newJobApplication;
   }
 
-  async updateJobApplication(_id: any, payload: PayloadJobApplicationUpdate) {
-    const jobApplicationData = {
-      status: payload.status,
-      feedback: payload.feedback,
-    };
+  async updateJobApplication(_id: string, { status, feedback }: JobApplicationUpdateDTO) {
+
+    const jobApplicationData = { status, feedback };
     const updateJobApplication = this.jobApplicationRepository.update(
       _id,
       jobApplicationData

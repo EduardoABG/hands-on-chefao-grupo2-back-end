@@ -44,18 +44,10 @@ export default class JobApplicationController {
 
   update() {
     return async (req: Request, res: Response) => {
-      try {
-        const { id } = req.params;
+      const { id: jobApplId } = req.params;
 
-        const updateJobApplication = await this.useCase.updateJobApplication(
-          id,
-          req.body as BodyJobApplicationUpdate
-        );
-        return res.status(200).json(updateJobApplication);
-      } catch (error) {
-        console.log(error);
-        return res.status(400);
-      }
+      const updateJobApplication = await this.useCase.updateJobApplication(jobApplId, req.body);
+      return res.status(200).json(updateJobApplication);
     };
   }
 

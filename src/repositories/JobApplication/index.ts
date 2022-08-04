@@ -18,17 +18,8 @@ export default class JobApplicationRepository implements IJobApplicationReposito
     return await this.jobApplicationModel.find(payload);
   }
 
-  async update(
-    id: any,
-    payload: {
-      status?: string;
-      feedback?: string;
-      tagsFeedback?: string[];
-      applicationDate: Date;
-    },
-    condition?: any
-  ) {
-    return await this.jobApplicationModel.updateOne({ _id: id }, payload);
+  async update(id: any, payload: { status?: string; feedback?: string; }) {
+    return await this.jobApplicationModel.findOneAndUpdate({ _id: id }, payload, { new: true });
   }
 
   async findAll(payload?: any) {
