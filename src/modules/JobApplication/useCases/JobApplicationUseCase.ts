@@ -1,18 +1,12 @@
 import IRepository from "../../../repositories/IRepository";
 import AppError from "../../../errors/AppError";
-import JobApplicationStatus from "../../../constants/JobApplicationStatus"
 const ObjectId = require("mongoose").Types.ObjectId;
 
-type PayloadJobApplicationCreate = {
-  status: number;
-  applicationDate: Date;
-  user: string;
-  job: {
-    _id: string;
-    name: string;
-    companyName: string;
-  };
+type CreateJobApplicationDTO = {
+  userId: string;
+  jobId: string;
 };
+
 type PayloadJobApplicationUpdate = {
   status: number;
   feedback: {
@@ -27,19 +21,34 @@ type PayloadJobApplicationUpdate = {
   };
 };
 export default class JobUseCase {
-  private repository: IRepository;
+  private jobApplicationRepository: IRepository;
+  private jobRepository: IRepository;
 
-  constructor(jobRepository: IRepository) {
-    this.repository = jobRepository;
+  constructor(jobApplicationRepository: IRepository, jobRepository: IRepository) {
+    this.jobApplicationRepository = jobApplicationRepository;
+    this.jobRepository = jobRepository;
   }
-  async createJobApplication(payload: PayloadJobApplicationCreate) {
+  async createJobApplication(payload: CreateJobApplicationDTO) {
+
+    const currentDate = new Date()
+
+    const job = await this.jobRepository.findById(payload.jobId);
+    if(!job) { throw new AppError(404, "Vaga não encontrada") }
+
     const jobApplicationData = {
-      status: payload.status,
-      applicationDate: payload.applicationDate,
-      user: payload.user,
-      job: payload.job,
+      status: 0,
+      applicationDate: currentDate.toISOString(),
+      user: payload.userId,
+      job: {
+        _id: job._id,
+        name: job.name,
+        companyName: job.companyName
+      },
     };
-    const newJobApplication = await this.repository.create(jobApplicationData);
+
+    const newJobApplication = await this.jobApplicationRepository.create(jobApplicationData);
+    if(!newJobApplication) { throw new Error() }
+
     return newJobApplication;
   }
 
@@ -48,40 +57,46 @@ export default class JobUseCase {
       status: payload.status,
       feedback: payload.feedback,
     };
-    const updateJobApplication = this.repository.update(
+    const updateJobApplication = this.jobApplicationRepository.update(
       _id,
       jobApplicationData
     );
     return updateJobApplication;
   }
-  async listAll() {
-    const jobApplicationList = await this.repository.findAll();
+  async listAll(id: string) {
+    const jobApplicationList = await this.jobApplicationRepository.find({ user: id });
     return jobApplicationList;
   }
 
-  async listInProgress() {
-    const inProgressList = await this.repository.find({ status: { $ne: 4}});
+  async listInProgress(id: string) {
+    const inProgressList = await this.jobApplicationRepository.find({ user: id, status: { $ne: 4} });
     return inProgressList;
   }
 
-  async listFinished() {
-    const inProgressList = await this.repository.find({ status: 4});
+  async listFinished(id: string) {
+    const inProgressList = await this.jobApplicationRepository.find({ user: id, status: 4 });
     return inProgressList;
   }
 
-  listJobApplication(_id: any) {
+  async listJobApplication(_id: any, userId: string) {
     const isValidId = ObjectId.isValid(_id);
     if (!isValidId) {
-      return null;
+      throw new AppError(400, "Id invalido");
     }
-    const listJobApplication = this.repository.findById(_id);
-    return listJobApplication;
+    const jobApplication = await this.jobApplicationRepository.findById(_id);
+    if(jobApplication.user != userId) {
+      throw new AppError(403, "Não autorizado");
+    }
+    return jobApplication;
   }
 
-  async deleteJobApplication(_id: any) {
+  async deleteJobApplication(_id: any, userId: string) {
     const isValidId = ObjectId.isValid(_id);
     if (!isValidId) { throw new AppError(404, "Id inválido") }
 
-    return await this.repository.delete(_id);
+    const jobApplication = await this.jobApplicationRepository.findById(_id);
+    if(jobApplication.user != userId) { throw new AppError(403, "Não autorizado") }
+
+    return await this.jobApplicationRepository.delete(_id);
   }
 }

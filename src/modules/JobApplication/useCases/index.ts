@@ -1,7 +1,8 @@
-import { jobApplicationRepository } from "../../../repositories";
+import { jobApplicationRepository, jobRepository } from "../../../repositories";
 import JobApplicationUseCase from "./JobApplicationUseCase";
 
 const jobApplicationUseCase = new JobApplicationUseCase(
-  jobApplicationRepository
+  jobApplicationRepository,
+  jobRepository,
 );
 export { jobApplicationUseCase };

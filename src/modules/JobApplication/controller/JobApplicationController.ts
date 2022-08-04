@@ -26,23 +26,19 @@ type BodyJobApplicationUpdate = {
 };
 export default class JobApplicationController {
   private useCase: JobApplicationUseCase;
+
   constructor(useCase: JobApplicationUseCase) {
     this.useCase = useCase;
   }
+
   create() {
     return async (req: Request, res: Response) => {
-      try {
-        const newJob = await this.useCase.createJobApplication(
-          req.body as BodyJobCreateApplication
-        );
+      const { id: userId } = req.user as User;
+      const { job_id: jobId } = req.body;
 
-        if (newJob) {
-          return res.status(201).json(newJob);
-        }
-      } catch (error) {
-        console.log(error);
-        return res.status(400);
-      }
+      const newJob = await this.useCase.createJobApplication({ userId, jobId });
+
+      return res.status(201).json(newJob);
     };
   }
 
@@ -65,73 +61,61 @@ export default class JobApplicationController {
 
   listAll() {
     return async (req: Request, res: Response) => {
-      try {
-        const jobApplicationList = await this.useCase.listAll();
-        return res.json(jobApplicationList);
-      } catch (error) {
-        console.log(error);
-        return res.status(500);
-      }
+      const { id } = req.user as User;
+
+      const jobApplicationList = await this.useCase.listAll(id);
+      return res.json(jobApplicationList);
     };
   }
 
   listInProgress() {
     return async (req: Request, res: Response) => {
-      try {
-        const inProgressList = await this.useCase.listInProgress();
+      const { id } = req.user as User;
 
-        if (!inProgressList) {
-          return res.status(404).json({ message: "Processo encerrado" });
-        }
+      const inProgressList = await this.useCase.listInProgress(id);
 
-        return res.json(inProgressList);
-      } catch (error) {
-        console.log(error);
-        return res.status(500);
+      if (!inProgressList) {
+        return res.status(404).json({ message: "Processo encerrado" });
       }
+
+      return res.json(inProgressList);
     };
   }
 
   listFinished() {
     return async (req: Request, res: Response) => {
-      try {
-        const finishedList = await this.useCase.listFinished();
+      const { id } = req.user as User;
 
-        if (!finishedList) {
-          return res.status(404).json({ message: "Processo encerrado" });
-        }
+      const finishedList = await this.useCase.listFinished(id);
 
-        return res.json(finishedList);
-      } catch (error) {
-        console.log(error);
-        return res.status(500);
+      if (!finishedList) {
+        return res.status(404).json({ message: "Processo encerrado" });
       }
+
+      return res.json(finishedList);
     };
   }
 
   list() {
     return async (req: Request, res: Response) => {
-      try {
-        const { id } = req.params;
+      const { id: userId } = req.user as User;
+      const { id: jobId } = req.params;
 
-        const listJobApplication = await this.useCase.listJobApplication(id);
+      const listJobApplication = await this.useCase.listJobApplication(jobId, userId);
 
-        if (!listJobApplication) {
-          return res.status(404).json({ message: "Processo encerrado" });
-        }
-
-        return res.json(listJobApplication);
-      } catch (error) {
-        console.log(error);
-        return res.status(400);
+      if (!listJobApplication) {
+        return res.status(404).json({ message: "Processo encerrado" });
       }
+
+      return res.json(listJobApplication);
     };
   }
   delete() {
     return async (req: Request, res: Response) => {
+      const { id: userId } = req.user as User;
       const { id } = req.params;
 
-      await this.useCase.deleteJobApplication(id);
+      await this.useCase.deleteJobApplication(id, userId);
 
       return res.status(204).json("");
     };
