@@ -1,8 +1,5 @@
 import { Request, Response } from "express";
 import AuthUseCase from "../useCase/AuthUseCase";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import logger from "../../../infra/logger";
 import CryptoJS from "crypto-js";
 
 export default class AuthController {
@@ -33,37 +30,24 @@ export default class AuthController {
 
   tokenGenerator() {
     return async (req: Request, res: Response) => {
-      try {
-        logger.info(
-          `[generatePasswordToken] start function body=${JSON.stringify(
-            req.body
-          )} client_ip=${req.ips}`
-        );
-        const savedUser = await this.useCase.generatePasswordToken(
-          req.body
-        );
-        if (!savedUser) {
-          logger.error(`[generatePasswordToken] user not found`);
-          return res.status(404).json("Email not found");
-        }
-        logger.log("nivel", "mensagem");
-        logger.info(
-          `[generatePasswordToken] user = ${JSON.stringify(savedUser)}`
-        );
 
-        const token = CryptoJS.AES.encrypt(
-          `${savedUser.email}`,
-          "CHEFAO"
-        ).toString();
-        // enviar um email com o token
-        savedUser.hashResetpassword = token;
-
-        await savedUser.save();
-        logger.info(`[generatePasswordToken] finish function`);
-        return res.json(token);
-      } catch (error) {
-        console.log(error);
+      const savedUser = await this.useCase.generatePasswordToken(
+        req.body
+      );
+      if (!savedUser) {
+        return res.status(404).json("Email not found");
       }
+
+      const token = CryptoJS.AES.encrypt(
+        `${savedUser.email}`,
+        "CHEFAO"
+      ).toString();
+      // enviar um email com o token
+      savedUser.hashResetpassword = token;
+
+      await savedUser.save();
+
+      return res.json(token);
     };
   }
 }

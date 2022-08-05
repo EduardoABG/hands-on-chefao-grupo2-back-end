@@ -6,6 +6,6 @@ const routes = Router();
 
 routes.post("/login", AuthValidator.login, authController.login());
 routes.post("/googleauth", auth, authController.loginWithGoogle());
-routes.post("/reset-senha", auth, authController.tokenGenerator());
+//routes.post("/reset-senha", auth, authController.tokenGenerator());
 
 export default routes;

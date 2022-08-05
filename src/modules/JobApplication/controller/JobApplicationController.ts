@@ -1,29 +1,6 @@
 import { Request, Response } from "express";
 import JobApplicationUseCase from "../useCases/JobApplicationUseCase";
 
-type BodyJobCreateApplication = {
-  status: number;
-  applicationDate: Date;
-  user: string;
-  job: {
-    _id: string;
-    name: string;
-    companyName: string;
-  };
-};
-type BodyJobApplicationUpdate = {
-  status: number;
-  feedback: {
-    letter:  string,
-    area: [{
-	    tittle: string,
-	    content: [{
-	      text: string,
-	      link: string,
-	    }]
-	  }]
-  };
-};
 export default class JobApplicationController {
   private useCase: JobApplicationUseCase;
 

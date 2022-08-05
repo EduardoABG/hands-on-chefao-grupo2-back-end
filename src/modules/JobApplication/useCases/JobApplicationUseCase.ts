@@ -2,12 +2,8 @@ import IJobApplicationRepository from "../../../repositories/JobApplication/IJob
 import IRepository from "../../../repositories/IRepository";
 import AppError from "../../../errors/AppError";
 import JobApplicationUpdateDTO from "./dtos/UpdateDTO";
+import CreateJobApplicationDTO from "./dtos/CreateDTO";
 const ObjectId = require("mongoose").Types.ObjectId;
-
-type CreateJobApplicationDTO = {
-  userId: string;
-  jobId: string;
-};
 
 
 export default class JobUseCase {
@@ -18,6 +14,7 @@ export default class JobUseCase {
     this.jobApplicationRepository = jobApplicationRepository;
     this.jobRepository = jobRepository;
   }
+
   async createJobApplication(payload: CreateJobApplicationDTO) {
 
     const currentDate = new Date()
@@ -51,6 +48,7 @@ export default class JobUseCase {
     );
     return updateJobApplication;
   }
+
   async listAll(id: string) {
     const jobApplicationList = await this.jobApplicationRepository.find({ user: id });
     return jobApplicationList;
@@ -68,13 +66,11 @@ export default class JobUseCase {
 
   async listJobApplication(_id: any, userId: string) {
     const isValidId = ObjectId.isValid(_id);
-    if (!isValidId) {
-      throw new AppError(400, "Id invalido");
-    }
+    if (!isValidId) { throw new AppError(400, "Id invalido"); }
+
     const jobApplication = await this.jobApplicationRepository.findById(_id);
-    if(jobApplication.user != userId) {
-      throw new AppError(403, "Não autorizado");
-    }
+    if(jobApplication.user != userId) { throw new AppError(403, "Não autorizado"); }
+    
     return jobApplication;
   }
 
