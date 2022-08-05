@@ -6,7 +6,7 @@
 </div>
 
 <h1 align="center">
-     👩 <a href="https://tech-delas.herokuapp.com/" alt="Tech Delas API"> Tech Delas API </a>
+      Tech Delas API
 </h1>
 
 <h3 align="center">
