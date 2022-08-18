@@ -1,15 +1,33 @@
 import { UploadApiResponse, v2 as cloudinary } from "cloudinary";
 import fs from "fs";
+import ENV from "../infra/config/env";
 import { v4 as uuid } from 'uuid';
 
-const uploader = async function(imagePath: string) {
+export default  class UploadService {
+  private cloudName: string = ENV.CLOUDINARY_CLOUD_NAME;
+  private apiKey: string = ENV.CLOUDINARY_API_KEY;
+  private apiSecret: string = ENV.CLOUDINARY_API_SECRET;
 
-  const uploadResult = await cloudinary.uploader.upload(imagePath,
-    { public_id: uuid() });
+  constructor() {
+    this.config();
+  }
 
-  fs.unlink(imagePath, (err) => { return; });
+  config() {
+    cloudinary.config({
+      cloud_name: this.cloudName,
+      api_key: this.apiKey,
+      api_secret: this.apiSecret,
+    })
+  }
 
-  return uploadResult as UploadApiResponse;
+
+  async send(imagePath: string) {
+
+    const uploadResult = await cloudinary.uploader.upload(imagePath,
+      { public_id: uuid() });
+
+    fs.unlink(imagePath, (err) => { return; });
+
+    return uploadResult as UploadApiResponse;
+  }
 }
-
-export default uploader;

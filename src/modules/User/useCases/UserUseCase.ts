@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import UploadService from "../../../services/UploadService";
 import AppError from "../../../errors/AppError";
 const ObjectId = require("mongoose").Types.ObjectId;
+const uploadService = new UploadService();
 
 export default class UserUseCase {
   private repository: IUserRepository;
@@ -25,7 +26,7 @@ export default class UserUseCase {
     }*/
 
     const hashedPassword = bcrypt.hashSync(password, 10);
-    const uploadResult = receivedPhoto.type==="link" ? receivedPhoto.resource : (await UploadService(receivedPhoto.resource)).secure_url;
+    const uploadResult = receivedPhoto.type==="link" ? receivedPhoto.resource : (await uploadService.send(receivedPhoto.resource)).secure_url;
 
     const userData = {
       name,
@@ -60,7 +61,7 @@ export default class UserUseCase {
     }
 
     if(receivedPhoto) {
-      uploadResult = receivedPhoto.type==="link" ? receivedPhoto.resource : (await UploadService(receivedPhoto.resource)).secure_url;
+      uploadResult = receivedPhoto.type==="link" ? receivedPhoto.resource : (await uploadService.send(receivedPhoto.resource)).secure_url;
     }
 
     const userData = {
